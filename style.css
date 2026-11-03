@@ -7,17 +7,18 @@
   --surface: #0d1c2d;
   --surface-raised: #112537;
   --input: #0a1a2d;
-  --border: #5fead3;
+  --border: #5febd4;
   --text: #f4f8ff;
   --muted: #9bb1d5;
-  --accent: #5fead3;
-  --accent-hover: #49d8c3;
+  --accent: #5febd4;
+  --accent-hover: #3dd9bf;
   --primary: #2763eb;
-  --secondary: #81bcf8;
+  --secondary: #818cf8;
+  --button-hover: #1c79c0;
   --danger: #fb7185;
   --body-glow: rgba(39, 99, 235, 0.22);
-  --body-glow-secondary: rgba(129, 188, 248, 0.2);
-  --body-glow-tertiary: rgba(95, 234, 211, 0.14);
+  --body-glow-secondary: rgba(129, 140, 248, 0.2);
+  --body-glow-tertiary: rgba(95, 235, 212, 0.14);
   --topbar-bg: rgba(7, 24, 39, 0.86);
   --panel-bg: rgba(13, 25, 38, 0.92);
   --card-bg: #101f30;
@@ -25,14 +26,14 @@
   --code-text: #dce9ff;
   --field-label: #dfeaff;
   --placeholder: #7589ad;
-  --button-text: #06151f;
+  --button-text: #ffffff;
   --subtle-border: rgba(156, 179, 218, 0.18);
-  --soft-accent-border: rgba(95, 234, 211, 0.4);
-  --soft-accent-bg: rgba(95, 234, 211, 0.08);
-  --soft-accent-bg-strong: rgba(95, 234, 211, 0.12);
-  --soft-accent-line: rgba(95, 234, 211, 0.16);
-  --focus-border: #81bcf8;
-  --focus-shadow: rgba(129, 188, 248, 0.15);
+  --soft-accent-border: rgba(95, 235, 212, 0.4);
+  --soft-accent-bg: rgba(95, 235, 212, 0.08);
+  --soft-accent-bg-strong: rgba(95, 235, 212, 0.12);
+  --soft-accent-line: rgba(95, 235, 212, 0.16);
+  --focus-border: #818cf8;
+  --focus-shadow: rgba(129, 140, 248, 0.15);
   --radius: 14px;
 }
 
@@ -42,17 +43,18 @@
   --surface: #ffffff;
   --surface-raised: #f5f9ff;
   --input: #ffffff;
-  --border: #bfd3ff;
+  --border: #5fd3ff;
   --text: #12233a;
   --muted: #5e728e;
   --accent: #2763eb;
-  --accent-hover: #1d58d6;
+  --accent-hover: #1c79c0;
   --primary: #2763eb;
-  --secondary: #81bcf8;
+  --secondary: #818cf8;
+  --button-hover: #1c79c0;
   --danger: #be123c;
   --body-glow: rgba(39, 99, 235, 0.18);
-  --body-glow-secondary: rgba(129, 188, 248, 0.15);
-  --body-glow-tertiary: rgba(95, 234, 211, 0.12);
+  --body-glow-secondary: rgba(129, 140, 248, 0.15);
+  --body-glow-tertiary: rgba(95, 235, 212, 0.12);
   --topbar-bg: rgba(237, 245, 255, 0.86);
   --panel-bg: rgba(255, 255, 255, 0.9);
   --card-bg: #f3f8ff;
@@ -62,10 +64,10 @@
   --placeholder: #8293af;
   --button-text: #ffffff;
   --subtle-border: rgba(18, 35, 58, 0.12);
-  --soft-accent-border: rgba(39, 99, 235, 0.26);
-  --soft-accent-bg: rgba(39, 99, 235, 0.06);
-  --soft-accent-bg-strong: rgba(39, 99, 235, 0.09);
-  --soft-accent-line: rgba(39, 99, 235, 0.2);
+  --soft-accent-border: rgba(95, 235, 212, 0.5);
+  --soft-accent-bg: rgba(95, 235, 212, 0.08);
+  --soft-accent-bg-strong: rgba(95, 235, 212, 0.14);
+  --soft-accent-line: rgba(95, 235, 212, 0.25);
   --focus-border: #2763eb;
   --focus-shadow: rgba(39, 99, 235, 0.12);
 }
@@ -343,13 +345,14 @@ textarea:focus-visible {
 }
 
 .button-primary {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: var(--button-text);
-  border-color: rgba(129, 188, 248, 0.36);
+  background: linear-gradient(135deg, #818cf8, #2763eb, #1c79c0, #5febd4);
+  color: #ffffff;
+  border-color: rgba(95, 235, 212, 0.4);
 }
 
 .button-primary:hover {
-  background: linear-gradient(135deg, #1e56d1, #6cb5f2);
+  background: var(--button-hover);
+  border-color: var(--button-hover);
 }
 
 .button-secondary,
