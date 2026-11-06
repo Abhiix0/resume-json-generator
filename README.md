@@ -1,6 +1,6 @@
 # 📄 Resume JSON Generator
 
-**### A modern, browser-based resume builder that turns your information into structured JSON and clean plain text.**
+**A modern, browser-based resume builder that turns your information into structured JSON and clean plain text.**
 
 Build your professional resume data through a simple interactive form, preview changes in real time, and export your information in JSON or plain-text format. Perfect for sharing structured resume data with AI tools, career platforms, and other applications.
 
