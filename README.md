@@ -10,6 +10,10 @@ Build your professional resume data through a simple interactive form, preview c
 
 ## ✨ Features
 
+![Resume JSON Generator Preview](public/resume-json-generator-preview.jpeg)
+
+## ✨ Features
+
 - Interactive resume builder with a single-page form
 - Live resume output generation
 - Export resume data in JSON format
