@@ -9,18 +9,15 @@ const outputContent = document.getElementById('output-content');
 const outputLabel = document.getElementById('output-label');
 const outputCount = document.getElementById('output-count');
 const themeToggle = document.getElementById('theme-toggle');
-const themeLabel = document.getElementById('theme-label');
 
 let currentFormat = 'json';
 let saveTimeout;
 
 function applyTheme(theme) {
   document.documentElement.dataset.theme = theme;
-  themeLabel.textContent = theme === 'dark' ? 'Light theme' : 'Dark theme';
-  themeToggle.setAttribute(
-    'aria-label',
-    `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`
-  );
+  const ariaLabel = `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`;
+  themeToggle.setAttribute('aria-label', ariaLabel);
+  themeToggle.setAttribute('title', ariaLabel);
   themeToggle.querySelector('.theme-icon').textContent = theme === 'dark' ? '☼' : '☾';
 }
 

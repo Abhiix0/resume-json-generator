@@ -147,14 +147,14 @@ textarea:focus-visible {
 .theme-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
   border: 1px solid var(--border);
   border-radius: 9px;
   background: var(--surface-raised);
   color: var(--text);
-  font-size: 12px;
-  font-weight: 700;
   transition: border-color 0.2s, background 0.2s;
 }
 
@@ -164,7 +164,7 @@ textarea:focus-visible {
 
 .theme-icon {
   color: var(--accent);
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1;
 }
 
