@@ -11,26 +11,15 @@ Build your professional resume data through a simple interactive form, preview c
 ## ✨ Features
 
 - Interactive resume builder with a single-page form
-- Live resume output generation
-- Export resume data in JSON format
-- Export resume data as clean plain text
-- Country code picker for phone numbers
-- Personal information and professional summary sections
-- Dynamic education entries with add and remove functionality
+- Live resume output generation with export as JSON or plain text (copy to clipboard or download)
+- Personal information section with country code picker for phone numbers
+- Professional summary section
+- Add and remove entries for education, work experience, projects, certifications, achievements, and leadership positions
 - Technical and professional skills management
-- Work experience and internship details
-- Project information with technology stacks and links
-- Certifications and achievements management
-- Leadership positions and responsibilities
-- Copy generated output directly to the clipboard
-- Download resume data as `.json` or `.txt` files
-- Automatic draft saving using Local Storage
-- Automatic restoration of saved information after refreshing
+- Automatic draft saving and restoration using Local Storage
 - Dark and light theme switching with saved preference
 - Reset functionality to clear resume information
-- Dynamic field counting in the live output
 - Responsive interface for different screen sizes
-- Privacy-focused, browser-based data handling
 
 ---
 
@@ -257,17 +246,20 @@ Contributions involving bug fixes, usability improvements, accessibility and add
 ```text
 resume-json-generator/
 │
-├── public/
-│   ├── logo.png
-│   └── resume-json-generator-preview.jpeg
+├── assets/
+│   └── readme-preview.png
 │
-├── index.html
-├── style.css
-├── script.js
+├── public/
+│   └── logo.png
+│
+├── CONTRIBUTING.md
 ├── countries.js
 ├── favicon.png
+├── index.html
+├── LICENSE
 ├── README.md
-└── LICENSE
+├── script.js
+└── style.css
 ```
 
 ---
