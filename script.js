@@ -209,11 +209,10 @@ function collectResume() {
     if (value) personal[key] = value;
   });
 
-  const phoneNumber = phoneInput.value.trim();
+  const phoneNumber = phoneInput.value.trim().replace(/\s+/g, ' ');
   if (phoneNumber) {
     const dialCode = getDialCode(phoneCountrySelect.value);
-    const cleaned = phoneNumber.replace(/[\s()\.\-]/g, '');
-    personal.phone = `+${dialCode} ${cleaned}`;
+    personal.phone = `+${dialCode} ${phoneNumber}`;
   }
 
   const resume = {
@@ -379,17 +378,43 @@ function restoreResume(resume) {
   });
 
   if (personal.phone && typeof personal.phone === 'string') {
-    const phoneMatch = personal.phone.match(/^\+(\d+)\s*(.*)$/);
-    if (phoneMatch) {
-      const dialCode = phoneMatch[1];
-      const number = phoneMatch[2];
-      const savedPhoneCountry = resume.phoneCountry || null;
-      const countryIso = findCountryByDialCode(dialCode, savedPhoneCountry);
-      
-      if (countryIso) {
-        phoneCountrySelect.value = countryIso;
+    if (personal.phone.startsWith('+')) {
+      const digitsAfterPlus = personal.phone.slice(1).match(/^\d+/);
+      if (digitsAfterPlus) {
+        const allDigits = digitsAfterPlus[0];
+        const savedPhoneCountry = resume.phoneCountry || null;
+        
+        let matchedDialCode = '';
+        let matchedCountryIso = null;
+        
+        for (let i = allDigits.length; i >= 1; i--) {
+          const candidateDialCode = allDigits.slice(0, i);
+          const matches = COUNTRY_CODES.filter(([, , code]) => code === candidateDialCode);
+          
+          if (matches.length > 0) {
+            matchedDialCode = candidateDialCode;
+            if (savedPhoneCountry) {
+              const preferred = matches.find(([iso]) => iso === savedPhoneCountry);
+              if (preferred) {
+                matchedCountryIso = preferred[0];
+                break;
+              }
+            }
+            matchedCountryIso = matches[0][0];
+            break;
+          }
+        }
+        
+        if (matchedCountryIso) {
+          phoneCountrySelect.value = matchedCountryIso;
+          const restAfterDialCode = personal.phone.slice(1 + matchedDialCode.length);
+          phoneInput.value = restAfterDialCode.trimStart();
+        } else {
+          phoneInput.value = personal.phone;
+        }
+      } else {
+        phoneInput.value = personal.phone;
       }
-      phoneInput.value = number;
     } else {
       phoneInput.value = personal.phone;
     }
