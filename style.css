@@ -105,7 +105,8 @@ button {
 
 button:focus-visible,
 input:focus-visible,
-textarea:focus-visible {
+textarea:focus-visible,
+select:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
@@ -293,7 +294,8 @@ textarea:focus-visible {
 }
 
 .field input,
-.field textarea {
+.field textarea,
+.field select {
   width: 100%;
   min-width: 0;
   border: 1px solid var(--border);
@@ -312,7 +314,8 @@ textarea:focus-visible {
 }
 
 .field input:focus,
-.field textarea:focus {
+.field textarea:focus,
+.field select:focus {
   border-color: var(--focus-border);
   box-shadow: 0 0 0 3px var(--focus-shadow);
 }
@@ -325,6 +328,12 @@ textarea:focus-visible {
 .field-hint {
   font-size: 10px;
   color: var(--muted);
+}
+
+.phone-row {
+  display: grid;
+  grid-template-columns: 124px 1fr;
+  gap: 8px;
 }
 
 .button {
@@ -598,6 +607,10 @@ footer span:first-child {
 
   .field.full {
     grid-column: auto;
+  }
+
+  .phone-row {
+    grid-template-columns: 110px 1fr;
   }
 
   footer {

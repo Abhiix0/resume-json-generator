@@ -14,6 +14,7 @@ Build your professional resume data through a simple interactive form, preview c
 - Live resume output generation
 - Export resume data in JSON format
 - Export resume data as clean plain text
+- Country code picker for phone numbers
 - Personal information and professional summary sections
 - Dynamic education entries with add and remove functionality
 - Technical and professional skills management
@@ -217,6 +218,8 @@ The application can be manually tested using the following checklist:
 - [ ] Refresh the page and verify theme preference restoration.
 - [ ] Test the Reset functionality and confirm saved draft removal.
 - [ ] Check responsiveness across different screen sizes.
+- [ ] Verify phone country picker output appears in both JSON and plain text formats.
+- [ ] Test that invalid phone numbers are rejected (e.g., 14 digits with +91, non-numeric characters).
 
 ---
 
@@ -261,6 +264,7 @@ resume-json-generator/
 ├── index.html
 ├── style.css
 ├── script.js
+├── countries.js
 ├── favicon.png
 ├── README.md
 └── LICENSE
