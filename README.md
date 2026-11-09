@@ -1,105 +1,82 @@
-# 📄 Resume JSON Generator
+# Resume JSON Generator
 
-**A modern, browser-based resume builder that turns your information into structured JSON and clean plain text.**
+A lightweight, browser-based resume builder that converts your professional information into structured JSON and clean plain text.
 
-Build your professional resume data through a simple interactive form, preview changes in real time, and export your information in JSON or plain-text format. Perfect for sharing structured resume data with AI tools, career platforms, and other applications.
+**[Live Demo](https://edulinkup-interns.github.io/resume-json-generator/)**
 
-**Live Demo:** [Resume JSON Generator](https://edulinkup-interns.github.io/resume-json-generator/)
+## Preview
 
----
+![Resume JSON Generator Preview](https://github.com/user-attachments/assets/6fd66f17-493c-400a-9b8d-b9924cb47462)
 
-## ✨ Features
+## Features
 
-- Interactive resume builder with a single-page form
-- Live resume output generation with export as JSON or plain text (copy to clipboard or download)
-- Personal information section with country code picker for phone numbers
-- Professional summary section
-- Add and remove entries for education, work experience, projects, certifications, achievements, and leadership positions
-- Technical and professional skills management
-- Automatic draft saving and restoration using Local Storage
-- Dark and light theme switching with saved preference
-- Reset functionality to clear resume information
-- Responsive interface for different screen sizes
+- Interactive resume builder with real-time output generation.
+- Manage personal information, education, skills, experience, and projects.
+- Add and remove entries in dynamic resume sections.
+- Export resume data as JSON or plain text.
+- Copy generated output to the clipboard.
+- Download generated files in `.json` and `.txt` formats.
+- Automatically save and restore drafts using Local Storage.
+- Dark and light theme support.
+- Responsive interface for different screen sizes.
+- Browser-based data handling without a backend.
 
----
-
-## 🖥️ Preview
-
-<img width="1600" height="797" alt="image" src="https://github.com/user-attachments/assets/6fd66f17-493c-400a-9b8d-b9924cb47462" />
-
----
-
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Technology | Purpose |
 |---|---|
-| HTML5 | Form structure and page layout |
-| CSS3 | Styling, themes and responsive layouts |
-| JavaScript (ES6+) | Dynamic functionality and DOM manipulation |
-| Local Storage | Persistent resume drafts and theme preferences |
-| Clipboard API | Copy generated resume output |
-| Blob API | Generate downloadable JSON and text files |
-| Git & GitHub | Version control and collaboration |
-| GitHub Pages | Website hosting and deployment |
+| HTML5 | Page structure |
+| CSS3 | Styling and responsive design |
+| JavaScript (ES6+) | Application logic and DOM manipulation |
+| Local Storage | Persistent draft storage |
+| Clipboard API | Copy generated output |
+| Blob API | File generation and downloads |
+| GitHub Pages | Hosting and deployment |
 
----
+## Getting Started
 
-## 🚀 Getting Started
+### Prerequisites
+
+- A modern web browser.
+- Git (optional, for cloning the repository).
 
 ### Run Locally
 
 1. Clone the repository:
 
-```bash
-git clone https://github.com/edulinkup-interns/resume-json-generator.git
-```
+   ```bash
+   git clone https://github.com/edulinkup-interns/resume-json-generator.git
+   ```
 
 2. Navigate to the project directory:
 
-```bash
-cd resume-json-generator
-```
+   ```bash
+   cd resume-json-generator
+   ```
 
 3. Open `index.html` in your browser.
 
-You can also use the **Live Server** extension in VS Code for local development.
+   Alternatively, use the Live Server extension in VS Code.
 
-No build tools, package installation, or backend setup required.
+No additional dependencies, build tools, or backend configuration are required.
 
----
+## Output Structure
 
-## 📖 How to Use
-
-1. Open the Resume JSON Generator in your browser.
-2. Enter your personal information, including your name, email, contact details and professional links.
-3. Add your professional summary, education, skills and other resume information.
-4. Use the **Add** and **Remove** buttons to manage repeatable sections.
-5. View your resume data updating automatically in the Live Output panel.
-6. Switch between **JSON** and **Plain Text** to choose your preferred output format.
-7. Use **Copy to Clipboard** to copy the generated content.
-8. Select **Download Output** to save your resume as a `.json` or `.txt` file.
-
-Your progress is automatically saved in your browser, so you can return to your draft even after refreshing the page.
-
----
-
-## 📦 Output Structure
-
-The generated resume data follows a structured JSON format containing the following top-level fields:
+The generated JSON contains the following top-level fields:
 
 | Field | Description |
 |---|---|
-| `personal` | Full name, email, phone, location, LinkedIn, GitHub and portfolio |
+| `personal` | Contact details and professional links |
 | `summary` | Professional summary |
-| `education` | Array of education entries |
-| `skills` | Array of technical and professional skills |
-| `experience` | Array of work experience and internship entries |
-| `projects` | Array of project details, technologies and links |
-| `certifications` | Array of certification details |
-| `achievements` | Array of achievements and accomplishments |
-| `positions` | Array of leadership positions and responsibilities |
+| `education` | Educational qualifications |
+| `skills` | Technical and professional skills |
+| `experience` | Work experience and internships |
+| `projects` | Projects, technologies, and links |
+| `certifications` | Professional certifications |
+| `achievements` | Accomplishments and awards |
+| `positions` | Leadership roles and responsibilities |
 
-### Example JSON Output
+### Example JSON
 
 ```json
 {
@@ -128,142 +105,40 @@ The generated resume data follows a structured JSON format containing the follow
 }
 ```
 
-*The example is illustrative. Actual fields are populated dynamically based on the information entered by the user. Empty fields are omitted from individual objects where applicable.*
+*This is an illustrative example. Actual output is generated dynamically from the information entered in the application.*
 
----
+## Privacy & Data Storage
 
-## 🔄 Application Workflow
+- Resume information is stored locally in the browser using `localStorage`.
+- No backend or external database is required.
+- Resume data is not uploaded to an external server by the application.
+- Saved drafts are available in the same browser profile.
+- Clearing browser site data may permanently remove saved information.
 
-```text
-       Open Resume Builder
-                ↓
-        Enter Personal Details
-                ↓
-       Add Professional Information
-                ↓
-       Manage Resume Sections
-                ↓
-         Generate Live Output
-                ↓
-       ┌────────┴────────┐
-       ↓                 ↓
-      JSON           Plain Text
-       ↓                 ↓
-       └────────┬────────┘
-                ↓
-        Copy or Download
-                ↓
-        Resume Data Ready!
-```
+**Note:** Anyone with access to the same browser profile may be able to view saved resume information. Avoid using shared or public devices for sensitive information.
 
----
+## Contributing
 
-## 🔐 Privacy & Data Storage
+Contributions, bug reports, and suggestions are welcome!
 
-Resume information is processed and stored locally in the user's browser using `localStorage`.
+1. Fork the repository.
+2. Create a feature branch:
 
-- No backend or database is required.
-- Resume drafts are not uploaded to an external server.
-- Saved information is not synchronized across browsers or devices.
-- Drafts can be restored after refreshing the page in the same browser.
-- Theme preferences are also stored locally.
-- Clearing browser site data may permanently remove saved drafts.
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
 
-**Privacy Note:** Anyone with access to the same browser profile may be able to view the saved resume information. Avoid entering sensitive personal information on shared or public devices.
+3. Make your changes and test them locally.
+4. Commit and push your changes:
 
----
+   ```bash
+   git add .
+   git commit -m "Describe your changes"
+   git push origin feature/your-feature-name
+   ```
 
-## 🎯 Why I Built It
+5. Open a Pull Request against the upstream repository.
 
-This project was built to practice and strengthen my understanding of:
-
-- JavaScript DOM manipulation
-- Working with JavaScript objects and arrays
-- Dynamic form generation and data collection
-- Event handling and event delegation
-- Array methods and data transformation
-- JSON serialization using `JSON.stringify()`
-- Working with browser APIs
-- Local Storage and persistent data management
-- Clipboard API and downloadable file generation
-- Dynamic UI rendering and theme management
-- Building responsive and interactive web applications
-
----
-
-## 🧪 Manual Testing
-
-The application can be manually tested using the following checklist:
-
-- [ ] Verify JSON output generation.
-- [ ] Verify plain-text output generation.
-- [ ] Switch between JSON and Plain Text formats.
-- [ ] Test copying output to the clipboard.
-- [ ] Test downloading both output formats.
-- [ ] Add and remove entries from repeatable sections.
-- [ ] Verify live output updates when form information changes.
-- [ ] Refresh the browser and verify draft restoration.
-- [ ] Switch between dark and light themes.
-- [ ] Refresh the page and verify theme preference restoration.
-- [ ] Test the Reset functionality and confirm saved draft removal.
-- [ ] Check responsiveness across different screen sizes.
-- [ ] Verify phone country picker output appears in both JSON and plain text formats.
-- [ ] Test that invalid phone numbers are rejected (e.g., 14 digits with +91, non-numeric characters).
-
----
-
-## 🤝 Contributing
-
-Contributions, bug reports and suggestions are welcome!
-
-If you would like to contribute:
-
-1. Check existing issues or open a new issue to discuss larger changes.
-2. Fork the repository.
-3. Create a new branch for your changes.
-
-```bash
-git checkout -b feature/your-feature-name
-```
-
-4. Make your changes and test the application manually in a browser.
-5. Commit and push your changes.
-
-```bash
-git add .
-git commit -m "Add your changes"
-git push origin feature/your-feature-name
-```
-
-6. Open a Pull Request against the upstream repository and describe your changes.
-
-Contributions involving bug fixes, usability improvements, accessibility and additional export formats are especially welcome.
-
----
-
-## 📁 Project Structure
-
-```text
-resume-json-generator/
-│
-├── assets/
-│   └── readme-preview.png
-│
-├── public/
-│   └── logo.png
-│
-├── CONTRIBUTING.md
-├── countries.js
-├── favicon.png
-├── index.html
-├── LICENSE
-├── README.md
-├── script.js
-└── style.css
-```
-
----
-
-## 📜 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
