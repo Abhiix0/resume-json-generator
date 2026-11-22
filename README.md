@@ -25,10 +25,17 @@ A lightweight, browser-based tool for building structured resume data and export
 10. What is the trade-off??
 11. How would you redesign/new feature/Future ideas??  
 
+## Live Demo
+
+[🚀 Try Resume JSON Generator](https://edulinkup-interns.github.io/resume-json-generator/)
+
 ## Preview
 
-<img width="1516" height="750" alt="image" src="https://github.com/user-attachments/assets/730cfb4c-1b1c-43c7-955a-42ffbced56e0" />
+### Light Mode
+![Resume JSON Generator - Light Mode](public/preview-light.png)
 
+### Dark Mode
+![Resume JSON Generator - Dark Mode](public/preview-dark.png)
 
 ## Getting Started
 
