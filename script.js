@@ -7,13 +7,17 @@ const form = document.getElementById("resume-form");
 const outputContent = document.getElementById("output-content");
 const outputLabel = document.getElementById("output-label");
 const outputCount = document.getElementById("output-count");
+const outputWrapper = document.getElementById("output-wrapper");
 const themeToggle = document.getElementById("theme-toggle");
 const phoneCountrySelect = document.getElementById("phoneCountry");
 const phoneInput = document.getElementById("phone");
 const fullNameInput = document.getElementById("fullName");
+const downloadBtn = document.getElementById("download-btn");
+const copyBtn = document.getElementById("copy-btn");
 
 let currentFormat = "json";
 let saveTimeout;
+let dynamicFieldCounter = 0;
 
 function applyTheme(theme) {
   document.documentElement.dataset.theme = theme;
@@ -179,6 +183,55 @@ const sections = {
   },
 };
 
+let counterId = 0;
+
+function formatCharCount(length) {
+  return `${length} ${length === 1 ? "character" : "characters"}`;
+}
+
+function updateCounter(textarea) {
+  const counter = textarea.nextElementSibling;
+  if (counter && counter.classList.contains("char-counter")) {
+    counter.textContent = formatCharCount(textarea.value.length);
+  }
+}
+
+let counterId = 0;
+
+function formatCharCount(length) {
+  return `${length} ${length === 1 ? "character" : "characters"}`;
+}
+
+function updateCounter(textarea) {
+  const counter = textarea.nextElementSibling;
+  if (counter && counter.classList.contains("char-counter")) {
+    counter.textContent = formatCharCount(textarea.value.length);
+  }
+}
+
+function initCounter(textarea) {
+  const existing = textarea.nextElementSibling;
+
+  if (!existing || !existing.classList.contains("char-counter")) {
+    const counter = document.createElement("span");
+    counter.className = "char-counter";
+    counter.id = `char-counter-${++counterId}`;
+    textarea.insertAdjacentElement("afterend", counter);
+    textarea.setAttribute(
+      "aria-describedby",
+      [textarea.getAttribute("aria-describedby"), counter.id]
+        .filter(Boolean)
+        .join(" ")
+    );
+  }
+
+  updateCounter(textarea);
+}
+
+function refreshCounters() {
+  document.querySelectorAll("textarea[data-counter]").forEach(initCounter);
+}
+
 function addEntry(sectionName, values = {}) {
   const section = sections[sectionName];
   if (!section) return;
@@ -190,8 +243,18 @@ function addEntry(sectionName, values = {}) {
 
   card.querySelectorAll("[data-key]").forEach((input) => {
     const key = input.dataset.key;
+    const id = `${sectionName}-${key}-${++dynamicFieldCounter}`;
+    input.id = id;
+
+    const label = input.closest(".field")?.querySelector("label");
+    if (label) {
+      label.htmlFor = id;
+    }
+
     input.value = values[key] ?? "";
   });
+
+  card.querySelectorAll("textarea[data-counter]").forEach(initCounter);
 
   container.appendChild(fragment);
   return container.lastElementChild;
@@ -409,7 +472,15 @@ function renderOutput() {
   outputContent.textContent = text;
   outputLabel.textContent =
     currentFormat === "json" ? "resume.json" : "resume.txt";
-  outputCount.textContent = `${countFields(resume)} values`;
+  const fieldCount = countFields(resume);
+  outputCount.textContent = `${fieldCount} values`;
+  outputWrapper.classList.toggle("is-empty", fieldCount === 0);
+
+  const isEmpty = fieldCount === 0;
+  downloadBtn.disabled = isEmpty;
+  copyBtn.disabled = isEmpty;
+  downloadBtn.title = isEmpty ? "Fill in at least one field to download" : "";
+  copyBtn.title = isEmpty ? "Fill in at least one field to copy" : "";
 }
 
 function saveToStorage() {
@@ -510,6 +581,7 @@ function restoreResume(resume) {
 
   validateFullName();
   validatePhoneNumber();
+  refreshCounters();
   renderOutput();
 }
 
@@ -538,7 +610,28 @@ document.addEventListener("click", (event) => {
   scheduleSave();
 });
 
-form.addEventListener("input", scheduleSave);
+form.addEventListener("input", (event) => {
+  if (event.target.matches("textarea[data-counter]")) {
+    updateCounter(event.target);
+  }
+
+  scheduleSave();
+});
+
+document.getElementById("clear-skills-btn").addEventListener("click", () => {
+  const skills = form.elements.namedItem("skills");
+  skills.value = "";
+  scheduleSave();
+  skills.focus();
+});
+
+document.getElementById("clear-summary-btn").addEventListener("click", () => {
+  const summary = form.elements.namedItem("summary");
+  summary.value = "";
+  updateCounter(summary);
+  scheduleSave();
+  summary.focus();
+});
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -639,7 +732,7 @@ copyButton.addEventListener("click", async () => {
 
 document.getElementById("download-btn").addEventListener("click", () => {
   renderOutput();
-
+  if (isResumeBlank()) return;
   const extension = currentFormat === "json" ? "json" : "txt";
   const mimeType = currentFormat === "json" ? "application/json" : "text/plain";
 
@@ -663,8 +756,34 @@ const cancelResetBtn = document.getElementById("cancel-reset-btn");
 const confirmResetBtn = document.getElementById("confirm-reset-btn");
 const resetBtn = document.getElementById("reset-btn");
 
-// Open the confirmation dialog
+// A resume is blank when no field in it holds any text
+function isResumeBlank() {
+  return countFields(collectResume()) === 0;
+}
+
+// Clear the form, repeatable sections, saved data and output
+function resetResume() {
+  form.reset();
+
+  Object.values(sections).forEach((section) => {
+    document.getElementById(section.container).replaceChildren();
+  });
+
+  clearTimeout(saveTimeout);
+  clearSavedResume();
+  validateFullName();
+  validatePhoneNumber();
+  refreshCounters();
+  renderOutput();
+}
+
+// Ask for confirmation only when there is something to lose
 resetBtn.addEventListener("click", () => {
+  if (isResumeBlank()) {
+    resetResume();
+    return;
+  }
+
   resetDialog.showModal();
 });
 
@@ -707,4 +826,24 @@ try {
 } catch (error) {
   console.error("Could not restore saved resume:", error);
   renderOutput();
+}
+
+// --- Back to Top Button ---
+const backToTopBtn = document.getElementById("backToTopBtn");
+
+if (backToTopBtn) {
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+      backToTopBtn.classList.remove("hidden")
+    } else {
+      backToTopBtn.classList.add("hidden")
+    }
+  });
+
+  backToTopBtn.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  });
 }
