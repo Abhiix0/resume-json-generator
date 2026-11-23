@@ -1,8 +1,7 @@
+"use strict";
 
-'use strict';
-
-const STORAGE_KEY = 'resume-json-generator-v1';
-const THEME_STORAGE_KEY = 'resume-json-generator-theme';
+const STORAGE_KEY = "resume-json-generator-v1";
+const THEME_STORAGE_KEY = "resume-json-generator-theme";
 
 const form = document.getElementById("resume-form");
 const outputContent = document.getElementById("output-content");
@@ -13,52 +12,54 @@ const phoneCountrySelect = document.getElementById("phoneCountry");
 const phoneInput = document.getElementById("phone");
 const fullNameInput = document.getElementById("fullName");
 
-let currentFormat = 'json';
+let currentFormat = "json";
 let saveTimeout;
 
 function applyTheme(theme) {
   document.documentElement.dataset.theme = theme;
-  const ariaLabel = `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`;
-  themeToggle.setAttribute('aria-label', ariaLabel);
-  themeToggle.setAttribute('title', ariaLabel);
-  themeToggle.querySelector('.theme-icon').textContent = theme === 'dark' ? '☼' : '☾';
+  const ariaLabel = `Switch to ${theme === "dark" ? "light" : "dark"} theme`;
+  themeToggle.setAttribute("aria-label", ariaLabel);
+  themeToggle.setAttribute("title", ariaLabel);
+  themeToggle.querySelector(".theme-icon").textContent =
+    theme === "dark" ? "☼" : "☾";
 }
 
 try {
   const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-  applyTheme(savedTheme === 'light' ? 'light' : 'dark');
+  applyTheme(savedTheme === "light" ? "light" : "dark");
 } catch (error) {
-  console.error('Could not restore theme preference:', error);
-  applyTheme('dark');
+  console.error("Could not restore theme preference:", error);
+  applyTheme("dark");
 }
 
-themeToggle.addEventListener('click', () => {
-  const nextTheme = document.documentElement.dataset.theme === 'dark'
-    ? 'light'
-    : 'dark';
+themeToggle.addEventListener("click", () => {
+  const nextTheme =
+    document.documentElement.dataset.theme === "dark" ? "light" : "dark";
   applyTheme(nextTheme);
 
   try {
     localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
   } catch (error) {
-    console.error('Could not save theme preference:', error);
+    console.error("Could not save theme preference:", error);
   }
 });
 
 function initPhoneCountrySelect() {
   COUNTRY_CODES.forEach(([iso, name, dialCode]) => {
-    const option = document.createElement('option');
+    const option = document.createElement("option");
     option.value = iso;
     option.textContent = `${name} (+${dialCode})`;
     phoneCountrySelect.appendChild(option);
   });
 
-  const userRegion = (navigator.language || 'en-IN').split('-')[1] || 'IN';
+  const userRegion = (navigator.language || "en-IN").split("-")[1] || "IN";
   const defaultCountry = COUNTRY_CODES.find(([iso]) => iso === userRegion)
     ? userRegion
-    : 'IN';
+    : "IN";
 
-  const defaultOption = phoneCountrySelect.querySelector(`option[value="${defaultCountry}"]`);
+  const defaultOption = phoneCountrySelect.querySelector(
+    `option[value="${defaultCountry}"]`
+  );
   if (defaultOption) {
     defaultOption.defaultSelected = true;
     defaultOption.selected = true;
@@ -67,7 +68,7 @@ function initPhoneCountrySelect() {
 
 function getDialCode(iso) {
   const country = COUNTRY_CODES.find(([code]) => code === iso);
-  return country ? country[2] : '';
+  return country ? country[2] : "";
 }
 
 function findCountryByDialCode(dialCode, preferredIso = null) {
@@ -82,24 +83,26 @@ function findCountryByDialCode(dialCode, preferredIso = null) {
 
 function validatePhoneNumber() {
   const number = phoneInput.value.trim();
-  
+
   if (!number) {
-    phoneInput.setCustomValidity('');
-    phoneInput.classList.remove('invalid');
+    phoneInput.setCustomValidity("");
+    phoneInput.classList.remove("invalid");
     return;
   }
 
-  const cleaned = number.replace(/[\s()\.\-]/g, '');
-  
+  const cleaned = number.replace(/[\s()\.\-]/g, "");
+
   if (!/^\d+$/.test(cleaned)) {
-    phoneInput.setCustomValidity('Phone number can only contain digits, spaces, ( ) . -');
-    phoneInput.classList.add('invalid');
+    phoneInput.setCustomValidity(
+      "Phone number can only contain digits, spaces, ( ) . -"
+    );
+    phoneInput.classList.add("invalid");
     return;
   }
 
   if (cleaned.length < 4) {
-    phoneInput.setCustomValidity('Phone number must have at least 4 digits');
-    phoneInput.classList.add('invalid');
+    phoneInput.setCustomValidity("Phone number must have at least 4 digits");
+    phoneInput.classList.add("invalid");
     return;
   }
 
@@ -107,71 +110,73 @@ function validatePhoneNumber() {
   const totalDigits = dialCode.length + cleaned.length;
 
   if (totalDigits > 15) {
-    phoneInput.setCustomValidity(`Phone number with country code (+${dialCode}) cannot exceed 15 digits (currently ${totalDigits})`);
-    phoneInput.classList.add('invalid');
+    phoneInput.setCustomValidity(
+      `Phone number with country code (+${dialCode}) cannot exceed 15 digits (currently ${totalDigits})`
+    );
+    phoneInput.classList.add("invalid");
     return;
   }
 
-  phoneInput.setCustomValidity('');
-  phoneInput.classList.remove('invalid');
+  phoneInput.setCustomValidity("");
+  phoneInput.classList.remove("invalid");
 }
 
 function validateFullName() {
   const name = fullNameInput.value.trim();
 
   if (!name) {
-    fullNameInput.setCustomValidity('');
-    fullNameInput.classList.remove('invalid');
+    fullNameInput.setCustomValidity("");
+    fullNameInput.classList.remove("invalid");
     return;
   }
 
   if (/\d/.test(name)) {
-    fullNameInput.setCustomValidity('Full name cannot contain numbers');
-    fullNameInput.classList.add('invalid');
+    fullNameInput.setCustomValidity("Full name cannot contain numbers");
+    fullNameInput.classList.add("invalid");
     return;
   }
 
-  fullNameInput.setCustomValidity('');
-  fullNameInput.classList.remove('invalid');
+  fullNameInput.setCustomValidity("");
+  fullNameInput.classList.remove("invalid");
 }
 
 initPhoneCountrySelect();
 
-phoneCountrySelect.addEventListener('change', validatePhoneNumber);
-phoneInput.addEventListener('input', validatePhoneNumber);
-fullNameInput.addEventListener('input', validateFullName);
+phoneCountrySelect.addEventListener("change", validatePhoneNumber);
+phoneInput.addEventListener("input", validatePhoneNumber);
+fullNameInput.addEventListener("input", validateFullName);
 
 const sections = {
   education: {
-    container: 'education-list',
-    template: 'education-template',
-    output: 'education'
+    container: "education-list",
+    template: "education-template",
+    output: "education",
   },
   experience: {
-    container: 'experience-list',
-    template: 'experience-template',
-    output: 'experience'
+    container: "experience-list",
+    template: "experience-template",
+    output: "experience",
   },
   projects: {
-    container: 'projects-list',
-    template: 'projects-template',
-    output: 'projects'
+    container: "projects-list",
+    template: "projects-template",
+    output: "projects",
   },
   certifications: {
-    container: 'certifications-list',
-    template: 'certifications-template',
-    output: 'certifications'
+    container: "certifications-list",
+    template: "certifications-template",
+    output: "certifications",
   },
   achievements: {
-    container: 'achievements-list',
-    template: 'achievements-template',
-    output: 'achievements'
+    container: "achievements-list",
+    template: "achievements-template",
+    output: "achievements",
   },
   positions: {
-    container: 'positions-list',
-    template: 'positions-template',
-    output: 'positions'
-  }
+    container: "positions-list",
+    template: "positions-template",
+    output: "positions",
+  },
 };
 
 function addEntry(sectionName, values = {}) {
@@ -181,11 +186,11 @@ function addEntry(sectionName, values = {}) {
   const container = document.getElementById(section.container);
   const template = document.getElementById(section.template);
   const fragment = template.content.cloneNode(true);
-  const card = fragment.querySelector('.repeat-card');
+  const card = fragment.querySelector(".repeat-card");
 
-  card.querySelectorAll('[data-key]').forEach((input) => {
+  card.querySelectorAll("[data-key]").forEach((input) => {
     const key = input.dataset.key;
-    input.value = values[key] ?? '';
+    input.value = values[key] ?? "";
   });
 
   container.appendChild(fragment);
@@ -195,7 +200,7 @@ function addEntry(sectionName, values = {}) {
 function readEntry(card) {
   const entry = {};
 
-  card.querySelectorAll('[data-key]').forEach((input) => {
+  card.querySelectorAll("[data-key]").forEach((input) => {
     const key = input.dataset.key;
     const value = input.value.trim();
 
@@ -211,7 +216,7 @@ function readEntries(sectionName) {
   const section = sections[sectionName];
   const container = document.getElementById(section.container);
 
-  return Array.from(container.querySelectorAll('.repeat-card'))
+  return Array.from(container.querySelectorAll(".repeat-card"))
     .map(readEntry)
     .filter((entry) => Object.keys(entry).length > 0);
 }
@@ -219,15 +224,15 @@ function readEntries(sectionName) {
 function collectResume() {
   const data = new FormData(form);
   const personal = {
-    fullName: data.get('fullName').trim(),
-    email: data.get('email').trim()
+    fullName: data.get("fullName").trim(),
+    email: data.get("email").trim(),
   };
 
   const optionalPersonalFields = [
-    'location',
-    'linkedin',
-    'github',
-    'portfolio'
+    "location",
+    "linkedin",
+    "github",
+    "portfolio",
   ];
 
   optionalPersonalFields.forEach((key) => {
@@ -235,7 +240,7 @@ function collectResume() {
     if (value) personal[key] = value;
   });
 
-  const phoneNumber = phoneInput.value.trim().replace(/\s+/g, ' ');
+  const phoneNumber = phoneInput.value.trim().replace(/\s+/g, " ");
   if (phoneNumber) {
     const dialCode = getDialCode(phoneCountrySelect.value);
     personal.phone = `+${dialCode} ${phoneNumber}`;
@@ -243,17 +248,18 @@ function collectResume() {
 
   const resume = {
     personal,
-    summary: data.get('summary').trim(),
-    education: readEntries('education'),
-    skills: data.get('skills')
-      .split(',')
+    summary: data.get("summary").trim(),
+    education: readEntries("education"),
+    skills: data
+      .get("skills")
+      .split(",")
       .map((skill) => skill.trim())
       .filter(Boolean),
-    experience: readEntries('experience'),
-    projects: readEntries('projects'),
-    certifications: readEntries('certifications'),
-    achievements: readEntries('achievements'),
-    positions: readEntries('positions')
+    experience: readEntries("experience"),
+    projects: readEntries("projects"),
+    certifications: readEntries("certifications"),
+    achievements: readEntries("achievements"),
+    positions: readEntries("positions"),
   };
 
   return resume;
@@ -264,14 +270,14 @@ function countFields(value) {
     return value.reduce((total, item) => total + countFields(item), 0);
   }
 
-  if (value !== null && typeof value === 'object') {
+  if (value !== null && typeof value === "object") {
     return Object.values(value).reduce(
       (total, item) => total + countFields(item),
       0
     );
   }
 
-  if (typeof value === 'string') return value.trim() ? 1 : 0;
+  if (typeof value === "string") return value.trim() ? 1 : 0;
   return 0;
 }
 
@@ -283,75 +289,106 @@ function toPlainText(resume) {
 
   const personal = resume.personal;
 
-  lines.push(personal.fullName || 'Resume');
-  lines.push('='.repeat(Math.max(6, (personal.fullName || 'Resume').length)));
-  add('Email', personal.email);
-  add('Phone', personal.phone);
-  add('Location', personal.location);
-  add('LinkedIn', personal.linkedin);
-  add('GitHub', personal.github);
-  add('Portfolio', personal.portfolio);
+  lines.push(personal.fullName || "Resume");
+  lines.push("=".repeat(Math.max(6, (personal.fullName || "Resume").length)));
+  add("Email", personal.email);
+  add("Phone", personal.phone);
+  add("Location", personal.location);
+  add("LinkedIn", personal.linkedin);
+  add("GitHub", personal.github);
+  add("Portfolio", personal.portfolio);
 
   if (resume.summary) {
-    lines.push('', 'PROFESSIONAL SUMMARY', resume.summary);
+    lines.push("", "PROFESSIONAL SUMMARY", resume.summary);
   }
 
   if (resume.education.length) {
-    lines.push('', 'EDUCATION');
+    lines.push("", "EDUCATION");
     resume.education.forEach((item) => {
       lines.push(
-        [item.degree, item.field].filter(Boolean).join(' — ') || 'Education'
+        [item.degree, item.field].filter(Boolean).join(" — ") || "Education"
       );
-      add('Institution', item.institution);
-      add('Duration', [item.startDate, item.endDate].filter(Boolean).join(' - '));
-      add('Grade', item.grade);
-      lines.push('');
+      add("Institution", item.institution);
+      add(
+        "Duration",
+        [item.startDate, item.endDate].filter(Boolean).join(" - ")
+      );
+      add("Grade", item.grade);
+      lines.push("");
     });
   }
 
   if (resume.skills.length) {
-    lines.push('', 'SKILLS', resume.skills.join(', '));
+    lines.push("", "SKILLS", resume.skills.join(", "));
   }
 
   const groups = [
-    ['EXPERIENCE', resume.experience, (item) => item.title || 'Experience', [
-      ['Company', 'company'],
-      ['Duration', null],
-      ['Description', 'description']
-    ]],
-    ['PROJECTS', resume.projects, (item) => item.name || 'Project', [
-      ['Technologies', 'technologies'],
-      ['Description', 'description'],
-      ['Project URL', 'url'],
-      ['Repository', 'repository']
-    ]],
-    ['CERTIFICATIONS', resume.certifications, (item) => item.name || 'Certification', [
-      ['Issuer', 'issuer'],
-      ['Date', 'date'],
-      ['Credential URL', 'url']
-    ]],
-    ['ACHIEVEMENTS', resume.achievements, (item) => item.title || 'Achievement', [
-      ['Description', 'description'],
-      ['Date', 'date']
-    ]],
-    ['POSITIONS & LEADERSHIP', resume.positions, (item) => item.title || 'Position', [
-      ['Organization', 'organization'],
-      ['Duration', null],
-      ['Description', 'description']
-    ]]
+    [
+      "EXPERIENCE",
+      resume.experience,
+      (item) => item.title || "Experience",
+      [
+        ["Company", "company"],
+        ["Duration", null],
+        ["Description", "description"],
+      ],
+    ],
+    [
+      "PROJECTS",
+      resume.projects,
+      (item) => item.name || "Project",
+      [
+        ["Technologies", "technologies"],
+        ["Description", "description"],
+        ["Project URL", "url"],
+        ["Repository", "repository"],
+      ],
+    ],
+    [
+      "CERTIFICATIONS",
+      resume.certifications,
+      (item) => item.name || "Certification",
+      [
+        ["Issuer", "issuer"],
+        ["Date", "date"],
+        ["Credential URL", "url"],
+      ],
+    ],
+    [
+      "ACHIEVEMENTS",
+      resume.achievements,
+      (item) => item.title || "Achievement",
+      [
+        ["Description", "description"],
+        ["Date", "date"],
+      ],
+    ],
+    [
+      "POSITIONS & LEADERSHIP",
+      resume.positions,
+      (item) => item.title || "Position",
+      [
+        ["Organization", "organization"],
+        ["Duration", null],
+        ["Description", "description"],
+      ],
+    ],
   ];
 
   groups.forEach(([heading, entries, getTitle, fields]) => {
     if (!entries.length) return;
 
-    lines.push('', heading);
+    lines.push("", heading);
 
     entries.forEach((item) => {
-      lines.push('', getTitle(item));
+      lines.push("", getTitle(item));
 
       fields.forEach(([label, key]) => {
         if (key === null) {
-          add('Duration', [item.startDate, item.endDate].filter(Boolean).join(' - '));
+          add(
+            "Duration",
+            [item.startDate, item.endDate].filter(Boolean).join(" - ")
+          );
         } else {
           add(label, item[key]);
         }
@@ -359,19 +396,19 @@ function toPlainText(resume) {
     });
   });
 
-  return lines.join('\n').trim() + '\n';
+  return lines.join("\n").trim() + "\n";
 }
 
 function renderOutput() {
   const resume = collectResume();
-  const text = currentFormat === 'json'
-    ? JSON.stringify(resume, null, 2)
-    : toPlainText(resume);
+  const text =
+    currentFormat === "json"
+      ? JSON.stringify(resume, null, 2)
+      : toPlainText(resume);
 
   outputContent.textContent = text;
-  outputLabel.textContent = currentFormat === 'json'
-    ? 'resume.json'
-    : 'resume.txt';
+  outputLabel.textContent =
+    currentFormat === "json" ? "resume.json" : "resume.txt";
   outputCount.textContent = `${countFields(resume)} values`;
 }
 
@@ -381,7 +418,7 @@ function saveToStorage() {
     data.phoneCountry = phoneCountrySelect.value;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch (error) {
-    console.error('Could not save resume data:', error);
+    console.error("Could not save resume data:", error);
   }
 }
 
@@ -393,34 +430,38 @@ function scheduleSave() {
 }
 
 function restoreResume(resume) {
-  if (!resume || typeof resume !== 'object') return;
+  if (!resume || typeof resume !== "object") return;
 
   const personal = resume.personal || {};
 
   Object.entries(personal).forEach(([key, value]) => {
-    if (key === 'phone') return;
+    if (key === "phone") return;
     const input = form.elements.namedItem(key);
-    if (input && typeof value === 'string') input.value = value;
+    if (input && typeof value === "string") input.value = value;
   });
 
-  if (personal.phone && typeof personal.phone === 'string') {
-    if (personal.phone.startsWith('+')) {
+  if (personal.phone && typeof personal.phone === "string") {
+    if (personal.phone.startsWith("+")) {
       const digitsAfterPlus = personal.phone.slice(1).match(/^\d+/);
       if (digitsAfterPlus) {
         const allDigits = digitsAfterPlus[0];
         const savedPhoneCountry = resume.phoneCountry || null;
-        
-        let matchedDialCode = '';
+
+        let matchedDialCode = "";
         let matchedCountryIso = null;
-        
+
         for (let i = allDigits.length; i >= 1; i--) {
           const candidateDialCode = allDigits.slice(0, i);
-          const matches = COUNTRY_CODES.filter(([, , code]) => code === candidateDialCode);
-          
+          const matches = COUNTRY_CODES.filter(
+            ([, , code]) => code === candidateDialCode
+          );
+
           if (matches.length > 0) {
             matchedDialCode = candidateDialCode;
             if (savedPhoneCountry) {
-              const preferred = matches.find(([iso]) => iso === savedPhoneCountry);
+              const preferred = matches.find(
+                ([iso]) => iso === savedPhoneCountry
+              );
               if (preferred) {
                 matchedCountryIso = preferred[0];
                 break;
@@ -430,10 +471,12 @@ function restoreResume(resume) {
             break;
           }
         }
-        
+
         if (matchedCountryIso) {
           phoneCountrySelect.value = matchedCountryIso;
-          const restAfterDialCode = personal.phone.slice(1 + matchedDialCode.length);
+          const restAfterDialCode = personal.phone.slice(
+            1 + matchedDialCode.length
+          );
           phoneInput.value = restAfterDialCode.trimStart();
         } else {
           phoneInput.value = personal.phone;
@@ -446,14 +489,12 @@ function restoreResume(resume) {
     }
   }
 
-  const summary = form.elements.namedItem('summary');
-  if (summary) summary.value = resume.summary || '';
+  const summary = form.elements.namedItem("summary");
+  if (summary) summary.value = resume.summary || "";
 
-  const skills = form.elements.namedItem('skills');
+  const skills = form.elements.namedItem("skills");
   if (skills) {
-    skills.value = Array.isArray(resume.skills)
-      ? resume.skills.join(', ')
-      : '';
+    skills.value = Array.isArray(resume.skills) ? resume.skills.join(", ") : "";
   }
 
   Object.entries(sections).forEach(([name, section]) => {
@@ -477,29 +518,29 @@ function clearSavedResume() {
     localStorage.removeItem(STORAGE_KEY);
     return true;
   } catch (error) {
-    console.error('Could not clear local storage:', error);
+    console.error("Could not clear local storage:", error);
     return false;
   }
 }
 
-document.querySelectorAll('[data-add]').forEach((button) => {
-  button.addEventListener('click', () => {
+document.querySelectorAll("[data-add]").forEach((button) => {
+  button.addEventListener("click", () => {
     addEntry(button.dataset.add);
     scheduleSave();
   });
 });
 
-document.addEventListener('click', (event) => {
-  const button = event.target.closest('.remove-btn');
+document.addEventListener("click", (event) => {
+  const button = event.target.closest(".remove-btn");
   if (!button) return;
 
-  button.closest('.repeat-card').remove();
+  button.closest(".repeat-card").remove();
   scheduleSave();
 });
 
-form.addEventListener('input', scheduleSave);
+form.addEventListener("input", scheduleSave);
 
-form.addEventListener('submit', (event) => {
+form.addEventListener("submit", (event) => {
   event.preventDefault();
 
   if (!form.reportValidity()) return;
@@ -508,50 +549,106 @@ form.addEventListener('submit', (event) => {
   saveToStorage();
 });
 
-document.querySelectorAll('[data-format]').forEach((button) => {
-  button.addEventListener('click', () => {
+document.querySelectorAll("[data-format]").forEach((button) => {
+  button.addEventListener("click", () => {
     currentFormat = button.dataset.format;
 
-    document.querySelectorAll('[data-format]').forEach((tab) => {
+    document.querySelectorAll("[data-format]").forEach((tab) => {
       const active = tab === button;
-      tab.classList.toggle('active', active);
-      tab.setAttribute('aria-selected', String(active));
+      tab.classList.toggle("active", active);
+      tab.setAttribute("aria-selected", String(active));
     });
 
     renderOutput();
   });
 });
 
-document.getElementById('copy-btn').addEventListener('click', async () => {
-  try {
-    await navigator.clipboard.writeText(outputContent.textContent);
-    const button = document.getElementById('copy-btn');
-    const previousText = button.textContent;
+const copyButton = document.getElementById("copy-btn");
+const copyStatus = document.getElementById("copy-status");
 
-    button.textContent = 'Copied!';
-    setTimeout(() => {
-      button.textContent = previousText;
-    }, 1500);
+let copyStatusTimeout;
+
+function showCopyStatus(message, type) {
+  clearTimeout(copyStatusTimeout);
+
+  copyStatus.textContent = message;
+  copyStatus.className = `copy-status ${type}`;
+
+  copyStatusTimeout = setTimeout(() => {
+    copyStatus.textContent = "";
+    copyStatus.className = "copy-status";
+  }, 5000);
+}
+
+async function copyToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (error) {
+      console.warn("Clipboard API failed. Trying fallback:", error);
+    }
+  }
+
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.style.position = "fixed";
+  textArea.style.opacity = "0";
+
+  document.body.appendChild(textArea);
+  textArea.select();
+
+  try {
+    const successful = document.execCommand("copy");
+    if (!successful) {
+      throw new Error("Fallback copy failed");
+    }
+    return true;
+  } finally {
+    textArea.remove();
+  }
+}
+
+copyButton.addEventListener("click", async () => {
+  console.log("COPY BUTTON CLICKED");
+  console.log("Status element:", copyStatus);
+  renderOutput();
+
+  const text = outputContent.textContent;
+
+  try {
+    const copied = await copyToClipboard(text);
+
+    if (copied) {
+      showCopyStatus("Copied successfully!", "is-success");
+    } else {
+      showCopyStatus(
+        "Unable to copy. Please copy the output manually.",
+        "is-error"
+      );
+    }
   } catch (error) {
-    console.error('Clipboard access failed:', error);
-    window.prompt('Copy your resume output:', outputContent.textContent);
+    console.error("Clipboard access failed:", error);
+
+    showCopyStatus(
+      "Unable to copy. Please select and copy the output manually.",
+      "is-error"
+    );
   }
 });
 
-document.getElementById('download-btn').addEventListener('click', () => {
+document.getElementById("download-btn").addEventListener("click", () => {
   renderOutput();
 
-  const extension = currentFormat === 'json' ? 'json' : 'txt';
-  const mimeType = currentFormat === 'json'
-    ? 'application/json'
-    : 'text/plain';
+  const extension = currentFormat === "json" ? "json" : "txt";
+  const mimeType = currentFormat === "json" ? "application/json" : "text/plain";
 
   const blob = new Blob([outputContent.textContent], {
-    type: `${mimeType};charset=utf-8`
+    type: `${mimeType};charset=utf-8`,
   });
 
   const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
+  const link = document.createElement("a");
 
   link.href = url;
   link.download = `resume.${extension}`;
@@ -561,7 +658,6 @@ document.getElementById('download-btn').addEventListener('click', () => {
   URL.revokeObjectURL(url);
 });
 
-
 const resetDialog = document.getElementById("reset-dialog");
 const cancelResetBtn = document.getElementById("cancel-reset-btn");
 const confirmResetBtn = document.getElementById("confirm-reset-btn");
@@ -569,37 +665,36 @@ const resetBtn = document.getElementById("reset-btn");
 
 // Open the confirmation dialog
 resetBtn.addEventListener("click", () => {
-    resetDialog.showModal();
+  resetDialog.showModal();
 });
 
 // Close the dialog without resetting anything
 cancelResetBtn.addEventListener("click", () => {
-    resetDialog.close();
+  resetDialog.close();
 });
 
 // Close the dialog when Escape is pressed
 resetDialog.addEventListener("cancel", (event) => {
-    event.preventDefault();
-    resetDialog.close();
+  event.preventDefault();
+  resetDialog.close();
 });
 
 // Reset the resume only after confirmation
 confirmResetBtn.addEventListener("click", () => {
-    resetDialog.close();
+  resetDialog.close();
 
-    form.reset();
+  form.reset();
 
-    Object.values(sections).forEach((section) => {
-        document.getElementById(section.container).replaceChildren();
-    });
+  Object.values(sections).forEach((section) => {
+    document.getElementById(section.container).replaceChildren();
+  });
 
-    clearTimeout(saveTimeout);
-    clearSavedResume();
-    validateFullName();
-    validatePhoneNumber();
-    renderOutput();
+  clearTimeout(saveTimeout);
+  clearSavedResume();
+  validateFullName();
+  validatePhoneNumber();
+  renderOutput();
 });
-
 
 try {
   const saved = localStorage.getItem(STORAGE_KEY);
@@ -610,6 +705,6 @@ try {
     renderOutput();
   }
 } catch (error) {
-  console.error('Could not restore saved resume:', error);
+  console.error("Could not restore saved resume:", error);
   renderOutput();
 }
