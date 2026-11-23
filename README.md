@@ -238,9 +238,31 @@ No framework, backend, database, or third-party package is required.
 
 Resume information and saved drafts are handled in your browser by this application. Drafts are stored in `localStorage`; avoid using a shared or public device for sensitive personal information, and clear the saved draft when finished.
 
+
+## Good First Issues
+
+New to open source? We'd love to have you contribute!
+
+Start with these beginner-friendly issues:
+
+- [Good first issues](https://github.com/edulinkup-interns/resume-json-generator/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+- [Issues marked as help wanted](https://github.com/edulinkup-interns/resume-json-generator/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+
+Please read the issue description and the [contribution guidelines](CONTRIBUTING.md) before starting work.
+
+## Roadmap
+
+Here are the currently tracked improvements:
+
+- [ ] [Improve copy feedback and clipboard error handling](https://github.com/edulinkup-interns/resume-json-generator/issues/39)
+
+The roadmap reflects open, tracked issues. New ideas and planned features can be proposed through GitHub Issues.
+
+
 ## Contributing
 
 Issues and pull requests for bug fixes, usability improvements, and additional export formats are welcome.
+
 
 ## License
 
