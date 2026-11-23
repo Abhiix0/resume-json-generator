@@ -12,18 +12,104 @@ A lightweight, browser-based tool for building structured resume data and export
 - **Responsive interface** with a dark theme for desktop and mobile screens.
 - **Reset option** to clear the saved draft and start over.
 
-## Interview Questions
-1. What problem does this project solve??
-2. Why did you build this??
-3. What exactly did you implement??
-4. What is the Tech stack??
-5. What about database??
-6. How are users Authorised??
-7. How did you deploy this project??
-8. What was the hardest bug??
-9. What if the users increase to 100x than usual??
-10. What is the trade-off??
-11. How would you redesign/new feature/Future ideas??  
+## Design Decisions & FAQ
+
+### 1. What problem does this project solve?
+
+Creating structured resume data manually can be time-consuming and requires knowledge of JSON formatting. This project simplifies that process by providing a guided form where users can enter their resume information and automatically generate structured JSON output.
+
+### 2. Why was this project built?
+
+The project was designed to make resume data creation easier, faster, and more accessible. Instead of manually writing JSON, users can fill out a simple form and obtain structured resume data that can be reused in other applications and workflows.
+
+### 3. What exactly has been implemented?
+
+The application includes:
+
+- A single-page resume builder with nine sections.
+- Dynamic fields for adding and removing education, experience, projects, certifications, achievements, and positions.
+- Live JSON and plain-text previews.
+- Copy-to-clipboard functionality.
+- JSON file downloads.
+- Automatic draft saving and restoration using browser local storage.
+- Light and dark themes.
+- Input validation and character counters.
+- A reset option to clear resume information.
+
+### 4. What is the technology stack?
+
+The project uses:
+
+- **HTML5:** Structures the application and its form elements.
+- **CSS3:** Handles styling, responsive layouts, and themes.
+- **Vanilla JavaScript:** Manages form interactions, validation, data collection, and JSON generation.
+- **Browser APIs:** Local Storage for draft persistence, Clipboard API for copying output, and Blob APIs for file downloads.
+- **Font Awesome:** Provides interface icons through its CDN.
+
+No frontend framework or build tool is required.
+
+### 5. Does the project use a database?
+
+No traditional database or backend is currently used. Resume drafts are stored locally in the user's browser using `localStorage`.
+
+This keeps the application lightweight and avoids sending personal resume information to a central server. However, saved drafts are limited to the browser and device where they were created.
+
+### 6. How are users authenticated?
+
+The current application does not implement user accounts, login, or an authentication system.
+
+Since resume information is processed and stored locally in the browser, users do not need to authenticate to use the application.
+
+### 7. How is the project deployed?
+
+The project is hosted using **GitHub Pages**. Its static HTML, CSS, and JavaScript files are served directly to visitors without requiring a separate application server or backend deployment.
+
+### 8. What was the hardest bug?
+
+The repository does not document one specific hardest bug. However, some technically challenging areas include:
+
+- Managing dynamically added and removed form entries.
+- Keeping the generated JSON synchronized with form inputs.
+- Restoring previously saved information from local storage.
+- Ensuring automatic saving works correctly while users interact with the form.
+
+These areas require careful coordination between form state, browser storage, and generated output.
+
+### 9. What if the number of users increases by 100x?
+
+The current architecture is lightweight because most application logic runs directly in the user's browser.
+
+Since the application does not depend on a centralized database or backend for its core functionality, increasing visitor numbers does not require scaling an application server or database.
+
+GitHub Pages handles static file hosting. If usage grows significantly, hosting limits, asset delivery, caching, and overall performance should still be monitored.
+
+### 10. What are the trade-offs of this architecture?
+
+The project prioritizes simplicity, privacy, and low maintenance.
+
+**Advantages:**
+- No backend infrastructure or database costs.
+- Resume information stays in the user's browser.
+- Simple deployment and maintenance.
+- Fast client-side processing.
+
+**Limitations:**
+- No cloud synchronization between devices.
+- No user accounts or collaborative features.
+- Clearing browser data may remove saved drafts.
+- Storage depends on browser capabilities and limits.
+
+### 11. What future improvements could be introduced?
+
+Potential improvements include:
+
+- Optional cloud storage and synchronization.
+- Resume templates and customization options.
+- PDF export alongside JSON downloads.
+- Importing existing resume data.
+- Improved accessibility and keyboard navigation.
+- More comprehensive JSON validation.
+- Additional export formats and integrations.
 
 ## Live Demo
 
