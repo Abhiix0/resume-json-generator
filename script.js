@@ -12,6 +12,7 @@ const themeToggle = document.getElementById("theme-toggle");
 const phoneCountrySelect = document.getElementById("phoneCountry");
 const phoneInput = document.getElementById("phone");
 const fullNameInput = document.getElementById("fullName");
+const emailInput = document.getElementById("email");
 const downloadBtn = document.getElementById("download-btn");
 const copyBtn = document.getElementById("copy-btn");
 
@@ -181,6 +182,9 @@ phoneInput.addEventListener("change", () => {
 });
 
 fullNameInput.addEventListener("input", validateFullName);
+emailInput.addEventListener("input", () => {
+  emailInput.setCustomValidity("");
+});
 
 const sections = {
   education: {
@@ -610,6 +614,7 @@ function restoreResume(resume) {
     }
   });
 
+  emailInput.setCustomValidity("");
   validateFullName();
   validatePhoneNumber();
   refreshCounters();
@@ -688,6 +693,16 @@ document.querySelectorAll("[data-format]").forEach((button) => {
   });
 });
 
+function ensureResumeValid() {
+  if (!fullNameInput.value.trim()) {
+    fullNameInput.setCustomValidity("Please fill out this field.");
+  }
+  if (!emailInput.value.trim()) {
+    emailInput.setCustomValidity("Please fill out this field.");
+  }
+  return form.reportValidity();
+}
+
 const copyButton = document.getElementById("copy-btn");
 const copyStatus = document.getElementById("copy-status");
 
@@ -737,6 +752,9 @@ async function copyToClipboard(text) {
 copyButton.addEventListener("click", async () => {
   console.log("COPY BUTTON CLICKED");
   console.log("Status element:", copyStatus);
+  
+  if (!ensureResumeValid()) return;
+  
   renderOutput();
 
   const text = outputContent.textContent;
@@ -763,6 +781,8 @@ copyButton.addEventListener("click", async () => {
 });
 
 document.getElementById("download-btn").addEventListener("click", () => {
+  if (!ensureResumeValid()) return;
+  
   renderOutput();
   if (isResumeBlank()) return;
   const extension = currentFormat === "json" ? "json" : "txt";
@@ -803,6 +823,7 @@ function resetResume() {
 
   clearTimeout(saveTimeout);
   clearSavedResume();
+  emailInput.setCustomValidity("");
   validateFullName();
   validatePhoneNumber();
   refreshCounters();
