@@ -148,6 +148,38 @@ initPhoneCountrySelect();
 
 phoneCountrySelect.addEventListener("change", validatePhoneNumber);
 phoneInput.addEventListener("input", validatePhoneNumber);
+
+phoneInput.addEventListener("paste", (event) => {
+  const text = event.clipboardData.getData("text");
+  if (!text || (!text.startsWith("+") && !text.startsWith("00"))) return;
+
+  const parsed = splitInternationalPhone(text, phoneCountrySelect.value);
+  if (parsed) {
+    event.preventDefault();
+    phoneCountrySelect.value = parsed.iso;
+    phoneInput.value = parsed.national;
+    validatePhoneNumber();
+    scheduleSave();
+  } else {
+    phoneInput.setCustomValidity("Pick the country code from the list and enter only the local number.");
+  }
+});
+
+phoneInput.addEventListener("change", () => {
+  const text = phoneInput.value.trim();
+  if (!text || (!text.startsWith("+") && !text.startsWith("00"))) return;
+
+  const parsed = splitInternationalPhone(text, phoneCountrySelect.value);
+  if (parsed) {
+    phoneCountrySelect.value = parsed.iso;
+    phoneInput.value = parsed.national;
+    validatePhoneNumber();
+    scheduleSave();
+  } else {
+    phoneInput.setCustomValidity("Pick the country code from the list and enter only the local number.");
+  }
+});
+
 fullNameInput.addEventListener("input", validateFullName);
 
 const sections = {
@@ -184,18 +216,6 @@ const sections = {
 };
 
 let counterId = 0;
-
-function formatCharCount(length) {
-  return `${length} ${length === 1 ? "character" : "characters"}`;
-}
-
-function updateCounter(textarea) {
-  const counter = textarea.nextElementSibling;
-  if (counter && counter.classList.contains("char-counter")) {
-    counter.textContent = formatCharCount(textarea.value.length);
-  }
-}
-
 
 function formatCharCount(length) {
   return `${length} ${length === 1 ? "character" : "characters"}`;
@@ -499,6 +519,51 @@ function scheduleSave() {
   saveTimeout = setTimeout(saveToStorage, 250);
 }
 
+function splitInternationalPhone(text, preferredIso) {
+  if (!text || typeof text !== 'string') return null;
+
+  let normalizedText = text;
+  if (text.startsWith('00')) {
+    normalizedText = '+' + text.slice(2);
+  }
+
+  if (!normalizedText.startsWith('+')) return null;
+
+  const digitsAfterPlus = normalizedText.slice(1).match(/^\d+/);
+  if (!digitsAfterPlus) return null;
+
+  const allDigits = digitsAfterPlus[0];
+  let matchedDialCode = '';
+  let matchedCountryIso = null;
+
+  for (let i = allDigits.length; i >= 1; i--) {
+    const candidateDialCode = allDigits.slice(0, i);
+    const matches = COUNTRY_CODES.filter(
+      ([, , code]) => code === candidateDialCode
+    );
+
+    if (matches.length > 0) {
+      matchedDialCode = candidateDialCode;
+      if (preferredIso) {
+        const preferred = matches.find(([iso]) => iso === preferredIso);
+        if (preferred) {
+          matchedCountryIso = preferred[0];
+          break;
+        }
+      }
+      matchedCountryIso = matches[0][0];
+      break;
+    }
+  }
+
+  if (!matchedCountryIso) return null;
+
+  const restAfterDialCode = normalizedText.slice(1 + matchedDialCode.length);
+  const national = restAfterDialCode.trimStart();
+
+  return { iso: matchedCountryIso, national };
+}
+
 function restoreResume(resume) {
   if (!resume || typeof resume !== "object") return;
 
@@ -513,49 +578,10 @@ function restoreResume(resume) {
   });
 
   if (personal.phone && typeof personal.phone === "string") {
-    if (personal.phone.startsWith("+")) {
-      const digitsAfterPlus = personal.phone.slice(1).match(/^\d+/);
-      if (digitsAfterPlus) {
-        const allDigits = digitsAfterPlus[0];
-        const savedPhoneCountry = resume.phoneCountry || null;
-
-        let matchedDialCode = "";
-        let matchedCountryIso = null;
-
-        for (let i = allDigits.length; i >= 1; i--) {
-          const candidateDialCode = allDigits.slice(0, i);
-          const matches = COUNTRY_CODES.filter(
-            ([, , code]) => code === candidateDialCode
-          );
-
-          if (matches.length > 0) {
-            matchedDialCode = candidateDialCode;
-            if (savedPhoneCountry) {
-              const preferred = matches.find(
-                ([iso]) => iso === savedPhoneCountry
-              );
-              if (preferred) {
-                matchedCountryIso = preferred[0];
-                break;
-              }
-            }
-            matchedCountryIso = matches[0][0];
-            break;
-          }
-        }
-
-        if (matchedCountryIso) {
-          phoneCountrySelect.value = matchedCountryIso;
-          const restAfterDialCode = personal.phone.slice(
-            1 + matchedDialCode.length
-          );
-          phoneInput.value = restAfterDialCode.trimStart();
-        } else {
-          phoneInput.value = personal.phone;
-        }
-      } else {
-        phoneInput.value = personal.phone;
-      }
+    const parsed = splitInternationalPhone(personal.phone, resume.phoneCountry || null);
+    if (parsed) {
+      phoneCountrySelect.value = parsed.iso;
+      phoneInput.value = parsed.national;
     } else {
       phoneInput.value = personal.phone;
     }
