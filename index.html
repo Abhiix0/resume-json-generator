@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -94,6 +95,8 @@
                     required
                   />
                 </div>
+
+                <!-- Phone Number -->
                 <div class="field">
                   <label for="phone">Phone number</label>
                   <div class="phone-row">
@@ -108,12 +111,19 @@
                       inputmode="tel"
                       autocomplete="tel-national"
                       placeholder="98765 43210"
+                      aria-describedby="phone-hint phone-error"
                     />
                   </div>
-                  <span class="field-hint"
-                    >Digits only, up to 15 including the country code.</span
-                  >
+                  <span class="field-hint" id="phone-hint">
+                    Digits only, up to 15 including the country code.
+                  </span>
+                  <span
+                    class="field-error"
+                    id="phone-error"
+                    aria-live="polite"
+                  ></span>
                 </div>
+
                 <div class="field full">
                   <label for="location">Location</label>
                   <input
@@ -123,6 +133,8 @@
                     placeholder="City, Country"
                   />
                 </div>
+
+                <!-- LinkedIn URL -->
                 <div class="field">
                   <label for="linkedin">LinkedIn URL</label>
                   <input
@@ -130,8 +142,19 @@
                     name="linkedin"
                     type="url"
                     placeholder="https://linkedin.com/in/..."
+                    aria-describedby="linkedin-hint linkedin-error"
                   />
+                  <span class="field-hint" id="linkedin-hint">
+                    Enter the full URL, including https://.
+                  </span>
+                  <span
+                    class="field-error"
+                    id="linkedin-error"
+                    aria-live="polite"
+                  ></span>
                 </div>
+
+                <!-- GitHub URL -->
                 <div class="field">
                   <label for="github">GitHub URL</label>
                   <input
@@ -139,8 +162,19 @@
                     name="github"
                     type="url"
                     placeholder="https://github.com/..."
+                    aria-describedby="github-hint github-error"
                   />
+                  <span class="field-hint" id="github-hint">
+                    Enter the full URL, including https://.
+                  </span>
+                  <span
+                    class="field-error"
+                    id="github-error"
+                    aria-live="polite"
+                  ></span>
                 </div>
+
+                <!-- Portfolio URL -->
                 <div class="field full">
                   <label for="portfolio">Portfolio / website</label>
                   <input
@@ -148,7 +182,16 @@
                     name="portfolio"
                     type="url"
                     placeholder="https://yourwebsite.com"
+                    aria-describedby="portfolio-hint portfolio-error"
                   />
+                  <span class="field-hint" id="portfolio-hint">
+                    Enter the full URL, including https://.
+                  </span>
+                  <span
+                    class="field-error"
+                    id="portfolio-error"
+                    aria-live="polite"
+                  ></span>
                 </div>
               </div>
             </section>

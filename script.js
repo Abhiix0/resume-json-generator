@@ -11,6 +11,22 @@ const outputWrapper = document.getElementById("output-wrapper");
 const themeToggle = document.getElementById("theme-toggle");
 const phoneCountrySelect = document.getElementById("phoneCountry");
 const phoneInput = document.getElementById("phone");
+const phoneError = document.getElementById("phone-error");
+
+const urlFields = [
+  {
+    input: document.getElementById("linkedin"),
+    error: document.getElementById("linkedin-error"),
+  },
+  {
+    input: document.getElementById("github"),
+    error: document.getElementById("github-error"),
+  },
+  {
+    input: document.getElementById("portfolio"),
+    error: document.getElementById("portfolio-error"),
+  },
+];
 const fullNameInput = document.getElementById("fullName");
 const emailInput = document.getElementById("email");
 const downloadBtn = document.getElementById("download-btn");
@@ -25,6 +41,8 @@ function applyTheme(theme) {
   const ariaLabel = `Switch to ${theme === "dark" ? "light" : "dark"} theme`;
   themeToggle.setAttribute("aria-label", ariaLabel);
   themeToggle.setAttribute("title", ariaLabel);
+  themeToggle.setAttribute("aria-pressed", String(theme === "dark"));
+
   themeToggle.querySelector(".theme-icon").textContent =
     theme === "dark" ? "☼" : "☾";
 }
@@ -85,29 +103,39 @@ function findCountryByDialCode(dialCode, preferredIso = null) {
   }
   return matches[0][0];
 }
+function updateValidationFeedback(input, errorElement, message) {
+  const hasError = Boolean(message);
+
+  errorElement.textContent = message;
+  input.classList.toggle("invalid", hasError);
+  input.setAttribute("aria-invalid", String(hasError));
+}
 
 function validatePhoneNumber() {
   const number = phoneInput.value.trim();
 
   if (!number) {
     phoneInput.setCustomValidity("");
-    phoneInput.classList.remove("invalid");
+    updateValidationFeedback(phoneInput, phoneError, "");
     return;
   }
 
-  const cleaned = number.replace(/[\s()\.\-]/g, "");
+  const cleaned = number.replace(/[\s().-]/g, "");
 
   if (!/^\d+$/.test(cleaned)) {
-    phoneInput.setCustomValidity(
-      "Phone number can only contain digits, spaces, ( ) . -"
-    );
-    phoneInput.classList.add("invalid");
+    const message =
+      "Phone number can only contain digits, spaces, ( ) . -";
+
+    phoneInput.setCustomValidity(message);
+    updateValidationFeedback(phoneInput, phoneError, message);
     return;
   }
 
   if (cleaned.length < 4) {
-    phoneInput.setCustomValidity("Phone number must have at least 4 digits");
-    phoneInput.classList.add("invalid");
+    const message = "Phone number must have at least 4 digits.";
+
+    phoneInput.setCustomValidity(message);
+    updateValidationFeedback(phoneInput, phoneError, message);
     return;
   }
 
@@ -115,15 +143,37 @@ function validatePhoneNumber() {
   const totalDigits = dialCode.length + cleaned.length;
 
   if (totalDigits > 15) {
-    phoneInput.setCustomValidity(
-      `Phone number with country code (+${dialCode}) cannot exceed 15 digits (currently ${totalDigits})`
-    );
-    phoneInput.classList.add("invalid");
+    const message =
+      `Phone number with country code (+${dialCode}) cannot exceed 15 digits (currently ${totalDigits}).`;
+
+    phoneInput.setCustomValidity(message);
+    updateValidationFeedback(phoneInput, phoneError, message);
     return;
   }
 
   phoneInput.setCustomValidity("");
-  phoneInput.classList.remove("invalid");
+  updateValidationFeedback(phoneInput, phoneError, "");
+}
+function validateUrl(input, errorElement) {
+  const value = input.value.trim();
+
+  if (!value) {
+    input.setCustomValidity("");
+    updateValidationFeedback(input, errorElement, "");
+    return;
+  }
+
+  if (input.validity.typeMismatch) {
+    const message =
+      "Please enter a valid URL, including https://.";
+
+    input.setCustomValidity(message);
+    updateValidationFeedback(input, errorElement, message);
+    return;
+  }
+
+  input.setCustomValidity("");
+  updateValidationFeedback(input, errorElement, "");
 }
 
 function validateFullName() {
@@ -148,6 +198,7 @@ function validateFullName() {
 initPhoneCountrySelect();
 
 phoneCountrySelect.addEventListener("change", validatePhoneNumber);
+
 phoneInput.addEventListener("input", validatePhoneNumber);
 
 phoneInput.addEventListener("paste", (event) => {
@@ -617,6 +668,9 @@ function restoreResume(resume) {
   emailInput.setCustomValidity("");
   validateFullName();
   validatePhoneNumber();
+  urlFields.forEach(({ input, error }) => {
+  validateUrl(input, error);
+});
   refreshCounters();
   renderOutput();
 }
@@ -679,17 +733,50 @@ form.addEventListener("submit", (event) => {
   saveToStorage();
 });
 
-document.querySelectorAll("[data-format]").forEach((button) => {
-  button.addEventListener("click", () => {
-    currentFormat = button.dataset.format;
+const formatTabs = Array.from(
+  document.querySelectorAll('[role="tab"][data-format]')
+);
 
-    document.querySelectorAll("[data-format]").forEach((tab) => {
-      const active = tab === button;
-      tab.classList.toggle("active", active);
-      tab.setAttribute("aria-selected", String(active));
-    });
+function activateFormatTab(selectedTab, moveFocus = false) {
+  formatTabs.forEach((tab) => {
+    const active = tab === selectedTab;
 
-    renderOutput();
+    tab.classList.toggle("active", active);
+    tab.setAttribute("aria-selected", String(active));
+    tab.setAttribute("tabindex", active ? "0" : "-1");
+  });
+
+  currentFormat = selectedTab.dataset.format;
+
+  if (moveFocus) {
+    selectedTab.focus();
+  }
+
+  renderOutput();
+}
+
+formatTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    activateFormatTab(tab);
+  });
+
+  tab.addEventListener("keydown", (event) => {
+    let nextTab;
+
+    if (event.key === "ArrowRight") {
+      nextTab = formatTabs[(formatTabs.indexOf(tab) + 1) % formatTabs.length];
+    } else if (event.key === "ArrowLeft") {
+      nextTab =
+        formatTabs[
+          (formatTabs.indexOf(tab) - 1 + formatTabs.length) %
+            formatTabs.length
+        ];
+    } else {
+      return;
+    }
+
+    event.preventDefault();
+    activateFormatTab(nextTab, true);
   });
 });
 
