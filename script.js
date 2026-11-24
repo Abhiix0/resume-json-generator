@@ -24,6 +24,8 @@ function applyTheme(theme) {
   const ariaLabel = `Switch to ${theme === "dark" ? "light" : "dark"} theme`;
   themeToggle.setAttribute("aria-label", ariaLabel);
   themeToggle.setAttribute("title", ariaLabel);
+  themeToggle.setAttribute("aria-pressed", String(theme === "dark"));
+
   themeToggle.querySelector(".theme-icon").textContent =
     theme === "dark" ? "☼" : "☾";
 }
@@ -641,19 +643,60 @@ form.addEventListener("submit", (event) => {
   saveToStorage();
 });
 
-document.querySelectorAll("[data-format]").forEach((button) => {
-  button.addEventListener("click", () => {
-    currentFormat = button.dataset.format;
+const formatTabs = Array.from(
+  document.querySelectorAll('[role="tab"][data-format]')
+);
 
-    document.querySelectorAll("[data-format]").forEach((tab) => {
-      const active = tab === button;
-      tab.classList.toggle("active", active);
-      tab.setAttribute("aria-selected", String(active));
-    });
+function activateFormatTab(selectedTab, moveFocus = false) {
+  formatTabs.forEach((tab) => {
+    const active = tab === selectedTab;
 
-    renderOutput();
+    tab.classList.toggle("active", active);
+    tab.setAttribute("aria-selected", String(active));
+    tab.setAttribute("tabindex", active ? "0" : "-1");
+  });
+
+  currentFormat = selectedTab.dataset.format;
+
+  if (moveFocus) {
+    selectedTab.focus();
+  }
+
+  renderOutput();
+}
+
+formatTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    activateFormatTab(tab);
+  });
+
+  tab.addEventListener("keydown", (event) => {
+    let nextTab;
+
+    if (event.key === "ArrowRight") {
+      nextTab = formatTabs[(formatTabs.indexOf(tab) + 1) % formatTabs.length];
+    } else if (event.key === "ArrowLeft") {
+      nextTab =
+        formatTabs[
+          (formatTabs.indexOf(tab) - 1 + formatTabs.length) %
+            formatTabs.length
+        ];
+    } else {
+      return;
+    }
+
+    event.preventDefault();
+    activateFormatTab(nextTab, true);
   });
 });
+
+const initialTab =
+  formatTabs.find((tab) => tab.dataset.format === currentFormat) ||
+  formatTabs[0];
+
+if (initialTab) {
+  activateFormatTab(initialTab);
+}
 
 const copyButton = document.getElementById("copy-btn");
 const copyStatus = document.getElementById("copy-status");
