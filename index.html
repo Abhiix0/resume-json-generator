@@ -9,7 +9,10 @@
     />
     <link rel="icon" type="image/png" href="favicon.png" />
     <title>resume.json</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <link rel="stylesheet" href="style.css" />
     <script src="countries.js" defer></script>
     <script src="script.js" defer></script>
@@ -151,31 +154,31 @@
             </section>
 
             <section class="form-section">
-  <div class="section-heading">
-    <h3>
-      <span class="section-number">02</span> Professional summary
-    </h3>
+              <div class="section-heading">
+                <h3>
+                  <span class="section-number">02</span> Professional summary
+                </h3>
 
-    <button
-      type="button"
-      class="button button-small"
-      id="clear-summary-btn"
-    >
-      Clear Summary
-    </button>
-  </div>
+                <button
+                  type="button"
+                  class="button button-small"
+                  id="clear-summary-btn"
+                >
+                  Clear Summary
+                </button>
+              </div>
 
-  <div class="field">
-    <label for="summary">About you</label>
-    <textarea
-      id="summary"
-      name="summary"
-      rows="4"
-      data-counter
-      placeholder="Summarize your experience, strengths, interests and career goals..."
-    ></textarea>
-  </div>
-</section>
+              <div class="field">
+                <label for="summary">About you</label>
+                <textarea
+                  id="summary"
+                  name="summary"
+                  rows="4"
+                  data-counter
+                  placeholder="Summarize your experience, strengths, interests and career goals..."
+                ></textarea>
+              </div>
+            </section>
 
             <section class="form-section">
               <div class="section-heading">
@@ -194,7 +197,11 @@
             <section class="form-section">
               <div class="section-heading">
                 <h3><span class="section-number">04</span> Skills</h3>
-                <button type="button" class="button button-small" id="clear-skills-btn">
+                <button
+                  type="button"
+                  class="button button-small"
+                  id="clear-skills-btn"
+                >
                   Clear skills
                 </button>
               </div>
@@ -325,7 +332,7 @@
             <span id="output-count">0 fields</span>
           </div>
 
-                    <div class="output-wrapper" id="output-wrapper">
+          <div class="output-wrapper" id="output-wrapper">
             <pre
               class="output-code"
             ><code id="output-content" aria-live="polite"></code></pre>
@@ -333,7 +340,7 @@
               Your resume data will appear here as you fill in the form.
             </div>
           </div>
-          
+
           <div class="output-actions">
             <button
               type="button"
@@ -349,6 +356,29 @@
             >
               Copy to clipboard
             </button>
+          </div>
+
+          <p
+            id="copy-status"
+            class="copy-status"
+            role="status"
+            aria-live="polite"
+          ></p>
+
+          <div class="privacy-note">
+            <span class="privacy-icon">⌑</span>
+            <p>
+              <strong>Your data stays yours.</strong><br />Information is stored
+              in this browser only. Nothing is sent to a server.
+            </p>
+          </div>
+
+          <div class="output-tip">
+            <span>✦</span>
+            <p>
+              Paste your exported resume into an AI tool to get tailored
+              feedback, interview questions, or career suggestions.
+            </p>
           </div>
         </aside>
       </div>
@@ -612,8 +642,12 @@
     </dialog>
 
     <!-- Back to Top Button -->
-<button id="backToTopBtn" class="back-to-top-btn hidden" aria-label="Back to top">
-<i class="fa-solid fa-chevron-up"></i></button>
-
+    <button
+      id="backToTopBtn"
+      class="back-to-top-btn hidden"
+      aria-label="Back to top"
+    >
+      <i class="fa-solid fa-chevron-up"></i>
+    </button>
   </body>
 </html>
