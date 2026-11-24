@@ -11,6 +11,22 @@ const outputWrapper = document.getElementById("output-wrapper");
 const themeToggle = document.getElementById("theme-toggle");
 const phoneCountrySelect = document.getElementById("phoneCountry");
 const phoneInput = document.getElementById("phone");
+const phoneError = document.getElementById("phone-error");
+
+const urlFields = [
+  {
+    input: document.getElementById("linkedin"),
+    error: document.getElementById("linkedin-error"),
+  },
+  {
+    input: document.getElementById("github"),
+    error: document.getElementById("github-error"),
+  },
+  {
+    input: document.getElementById("portfolio"),
+    error: document.getElementById("portfolio-error"),
+  },
+];
 const fullNameInput = document.getElementById("fullName");
 const downloadBtn = document.getElementById("download-btn");
 const copyBtn = document.getElementById("copy-btn");
@@ -84,29 +100,39 @@ function findCountryByDialCode(dialCode, preferredIso = null) {
   }
   return matches[0][0];
 }
+function updateValidationFeedback(input, errorElement, message) {
+  const hasError = Boolean(message);
+
+  errorElement.textContent = message;
+  input.classList.toggle("invalid", hasError);
+  input.setAttribute("aria-invalid", String(hasError));
+}
 
 function validatePhoneNumber() {
   const number = phoneInput.value.trim();
 
   if (!number) {
     phoneInput.setCustomValidity("");
-    phoneInput.classList.remove("invalid");
+    updateValidationFeedback(phoneInput, phoneError, "");
     return;
   }
 
-  const cleaned = number.replace(/[\s()\.\-]/g, "");
+  const cleaned = number.replace(/[\s().-]/g, "");
 
   if (!/^\d+$/.test(cleaned)) {
-    phoneInput.setCustomValidity(
-      "Phone number can only contain digits, spaces, ( ) . -"
-    );
-    phoneInput.classList.add("invalid");
+    const message =
+      "Phone number can only contain digits, spaces, ( ) . -";
+
+    phoneInput.setCustomValidity(message);
+    updateValidationFeedback(phoneInput, phoneError, message);
     return;
   }
 
   if (cleaned.length < 4) {
-    phoneInput.setCustomValidity("Phone number must have at least 4 digits");
-    phoneInput.classList.add("invalid");
+    const message = "Phone number must have at least 4 digits.";
+
+    phoneInput.setCustomValidity(message);
+    updateValidationFeedback(phoneInput, phoneError, message);
     return;
   }
 
@@ -114,15 +140,37 @@ function validatePhoneNumber() {
   const totalDigits = dialCode.length + cleaned.length;
 
   if (totalDigits > 15) {
-    phoneInput.setCustomValidity(
-      `Phone number with country code (+${dialCode}) cannot exceed 15 digits (currently ${totalDigits})`
-    );
-    phoneInput.classList.add("invalid");
+    const message =
+      `Phone number with country code (+${dialCode}) cannot exceed 15 digits (currently ${totalDigits}).`;
+
+    phoneInput.setCustomValidity(message);
+    updateValidationFeedback(phoneInput, phoneError, message);
     return;
   }
 
   phoneInput.setCustomValidity("");
-  phoneInput.classList.remove("invalid");
+  updateValidationFeedback(phoneInput, phoneError, "");
+}
+function validateUrl(input, errorElement) {
+  const value = input.value.trim();
+
+  if (!value) {
+    input.setCustomValidity("");
+    updateValidationFeedback(input, errorElement, "");
+    return;
+  }
+
+  if (input.validity.typeMismatch) {
+    const message =
+      "Please enter a valid URL, including https://.";
+
+    input.setCustomValidity(message);
+    updateValidationFeedback(input, errorElement, message);
+    return;
+  }
+
+  input.setCustomValidity("");
+  updateValidationFeedback(input, errorElement, "");
 }
 
 function validateFullName() {
@@ -147,7 +195,19 @@ function validateFullName() {
 initPhoneCountrySelect();
 
 phoneCountrySelect.addEventListener("change", validatePhoneNumber);
+
 phoneInput.addEventListener("input", validatePhoneNumber);
+
+urlFields.forEach(({ input, error }) => {
+  input.addEventListener("input", () => {
+    validateUrl(input, error);
+  });
+
+  input.addEventListener("blur", () => {
+    validateUrl(input, error);
+  });
+});
+
 fullNameInput.addEventListener("input", validateFullName);
 
 const sections = {
@@ -580,6 +640,9 @@ function restoreResume(resume) {
 
   validateFullName();
   validatePhoneNumber();
+  urlFields.forEach(({ input, error }) => {
+  validateUrl(input, error);
+});
   refreshCounters();
   renderOutput();
 }
