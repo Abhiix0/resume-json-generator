@@ -369,7 +369,9 @@ function scheduleSave() {
 function restoreResume(resume) {
   if (!resume || typeof resume !== 'object') return;
 
-  const personal = resume.personal || {};
+  const personal = (resume.personal && typeof resume.personal === 'object' && !Array.isArray(resume.personal))
+    ? resume.personal
+    : {};
 
   Object.entries(personal).forEach(([key, value]) => {
     if (key === 'phone') return;
@@ -431,14 +433,18 @@ function restoreResume(resume) {
   }
 
   Object.entries(sections).forEach(([name, section]) => {
-    const container = document.getElementById(section.container);
-    container.replaceChildren();
+    try {
+      const container = document.getElementById(section.container);
+      container.replaceChildren();
 
-    const entries = Array.isArray(resume[section.output])
-      ? resume[section.output]
-      : [];
+      const entries = Array.isArray(resume[section.output])
+        ? resume[section.output].filter((entry) => entry && typeof entry === 'object' && !Array.isArray(entry))
+        : [];
 
-    entries.forEach((entry) => addEntry(name, entry));
+      entries.forEach((entry) => addEntry(name, entry));
+    } catch (error) {
+      console.error(`Could not restore ${name} section:`, error);
+    }
   });
 
   validatePhoneNumber();
@@ -448,6 +454,7 @@ function restoreResume(resume) {
 function clearSavedResume() {
   try {
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(`${STORAGE_KEY}-backup`);
     return true;
   } catch (error) {
     console.error('Could not clear local storage:', error);
@@ -557,7 +564,20 @@ try {
   const saved = localStorage.getItem(STORAGE_KEY);
 
   if (saved) {
-    restoreResume(JSON.parse(saved));
+    try {
+      restoreResume(JSON.parse(saved));
+    } catch (error) {
+      console.error('Could not restore saved resume:', error);
+      const backupKey = `${STORAGE_KEY}-backup`;
+      if (!localStorage.getItem(backupKey)) {
+        try {
+          localStorage.setItem(backupKey, saved);
+        } catch (backupError) {
+          console.error('Could not save backup:', backupError);
+        }
+      }
+      renderOutput();
+    }
   } else {
     renderOutput();
   }
