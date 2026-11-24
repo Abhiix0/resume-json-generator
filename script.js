@@ -524,20 +524,20 @@ function scheduleSave() {
 }
 
 function splitInternationalPhone(text, preferredIso) {
-  if (!text || typeof text !== 'string') return null;
+  if (!text || typeof text !== "string") return null;
 
   let normalizedText = text;
-  if (text.startsWith('00')) {
-    normalizedText = '+' + text.slice(2);
+  if (text.startsWith("00")) {
+    normalizedText = "+" + text.slice(2);
   }
 
-  if (!normalizedText.startsWith('+')) return null;
+  if (!normalizedText.startsWith("+")) return null;
 
   const digitsAfterPlus = normalizedText.slice(1).match(/^\d+/);
   if (!digitsAfterPlus) return null;
 
   const allDigits = digitsAfterPlus[0];
-  let matchedDialCode = '';
+  let matchedDialCode = "";
   let matchedCountryIso = null;
 
   for (let i = allDigits.length; i >= 1; i--) {
@@ -571,7 +571,7 @@ function splitInternationalPhone(text, preferredIso) {
 function restoreResume(resume) {
   if (!resume || typeof resume !== "object") return;
 
-  const personal = (resume.personal && typeof resume.personal === 'object' && !Array.isArray(resume.personal))
+  const personal = (resume.personal && typeof resume.personal === "object" && !Array.isArray(resume.personal))
     ? resume.personal
     : {};
 
@@ -605,7 +605,7 @@ function restoreResume(resume) {
       container.replaceChildren();
 
       const entries = Array.isArray(resume[section.output])
-        ? resume[section.output].filter((entry) => entry && typeof entry === 'object' && !Array.isArray(entry))
+        ? resume[section.output].filter((entry) => entry && typeof entry === "object" && !Array.isArray(entry))
         : [];
 
       entries.forEach((entry) => addEntry(name, entry));
@@ -854,19 +854,10 @@ resetDialog.addEventListener("cancel", (event) => {
 // Reset the resume only after confirmation
 confirmResetBtn.addEventListener("click", () => {
   resetDialog.close();
-
-  form.reset();
-
-  Object.values(sections).forEach((section) => {
-    document.getElementById(section.container).replaceChildren();
-  });
-
-  clearTimeout(saveTimeout);
-  clearSavedResume();
-  validateFullName();
-  validatePhoneNumber();
-  renderOutput();
+  resetResume();
 });
+
+refreshCounters();
 
 try {
   const saved = localStorage.getItem(STORAGE_KEY);
@@ -875,13 +866,13 @@ try {
     try {
       restoreResume(JSON.parse(saved));
     } catch (error) {
-      console.error('Could not restore saved resume:', error);
+      console.error("Could not restore saved resume:", error);
       const backupKey = `${STORAGE_KEY}-backup`;
       if (!localStorage.getItem(backupKey)) {
         try {
           localStorage.setItem(backupKey, saved);
         } catch (backupError) {
-          console.error('Could not save backup:', backupError);
+          console.error("Could not save backup:", backupError);
         }
       }
       renderOutput();
