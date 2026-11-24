@@ -196,7 +196,6 @@ function updateCounter(textarea) {
   }
 }
 
-let counterId = 0;
 
 function formatCharCount(length) {
   return `${length} ${length === 1 ? "character" : "characters"}`;
