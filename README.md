@@ -1,46 +1,131 @@
 # Resume JSON Generator
 
-A lightweight, browser-based resume builder that converts your professional information into structured JSON and clean plain text.
-
-**[Live Demo](https://edulinkup-interns.github.io/resume-json-generator/)**
-
-## Preview
-
-![Resume JSON Generator Preview](https://github.com/user-attachments/assets/6fd66f17-493c-400a-9b8d-b9924cb47462)
+A lightweight, browser-based tool for building structured resume data and exporting it as JSON. Fill in your details through a guided form, review the generated output, and download it as `resume.json` for use in other projects or workflows.
 
 ## Features
 
-- Interactive resume builder with real-time output generation.
-- Manage personal information, education, skills, experience, and projects.
-- Add and remove entries in dynamic resume sections.
-- Export resume data as JSON or plain text.
-- Copy generated output to the clipboard.
-- Download generated files in `.json` and `.txt` formats.
-- Automatically save and restore drafts using Local Storage.
-- Dark and light theme support.
-- Responsive interface for different screen sizes.
-- Browser-based data handling without a backend.
+- **Single-page form** with nine sections covering personal information, summary, education, skills, experience, projects, certifications, achievements, and positions & leadership.
+- **Repeatable sections** for entries such as education, work experience, projects, certifications, achievements, and positions.
+- **Live output panel** that updates as you type, with **JSON** and **Plain text** tabs to review the structured resume data before exporting.
+- **Download or copy** the generated JSON.
+- **Automatic draft saving** in the browser using `localStorage`, so your progress remains available in the same browser.
+- **Responsive interface** with a dark theme for desktop and mobile screens.
+- **Reset option** to clear the saved draft and start over.
 
-## Tech Stack
+## Design Decisions & FAQ
 
-| Technology | Purpose |
-|---|---|
-| HTML5 | Page structure |
-| CSS3 | Styling and responsive design |
-| JavaScript (ES6+) | Application logic and DOM manipulation |
-| Local Storage | Persistent draft storage |
-| Clipboard API | Copy generated output |
-| Blob API | File generation and downloads |
-| GitHub Pages | Hosting and deployment |
+### 1. What problem does this project solve?
+
+Creating structured resume data manually can be time-consuming and requires knowledge of JSON formatting. This project simplifies that process by providing a guided form where users can enter their resume information and automatically generate structured JSON output.
+
+### 2. Why was this project built?
+
+The project was designed to make resume data creation easier, faster, and more accessible. Instead of manually writing JSON, users can fill out a simple form and obtain structured resume data that can be reused in other applications and workflows.
+
+### 3. What exactly has been implemented?
+
+The application includes:
+
+- A single-page resume builder with nine sections.
+- Dynamic fields for adding and removing education, experience, projects, certifications, achievements, and positions.
+- Live JSON and plain-text previews.
+- Copy-to-clipboard functionality.
+- JSON file downloads.
+- Automatic draft saving and restoration using browser local storage.
+- Light and dark themes.
+- Input validation and character counters.
+- A reset option to clear resume information.
+
+### 4. What is the technology stack?
+
+The project uses:
+
+- **HTML5:** Structures the application and its form elements.
+- **CSS3:** Handles styling, responsive layouts, and themes.
+- **Vanilla JavaScript:** Manages form interactions, validation, data collection, and JSON generation.
+- **Browser APIs:** Local Storage for draft persistence, Clipboard API for copying output, and Blob APIs for file downloads.
+- **Font Awesome:** Provides interface icons through its CDN.
+
+No frontend framework or build tool is required.
+
+### 5. Does the project use a database?
+
+No traditional database or backend is currently used. Resume drafts are stored locally in the user's browser using `localStorage`.
+
+This keeps the application lightweight and avoids sending personal resume information to a central server. However, saved drafts are limited to the browser and device where they were created.
+
+### 6. How are users authenticated?
+
+The current application does not implement user accounts, login, or an authentication system.
+
+Since resume information is processed and stored locally in the browser, users do not need to authenticate to use the application.
+
+### 7. How is the project deployed?
+
+The project is hosted using **GitHub Pages**. Its static HTML, CSS, and JavaScript files are served directly to visitors without requiring a separate application server or backend deployment.
+
+### 8. What was the hardest bug?
+
+The repository does not document one specific hardest bug. However, some technically challenging areas include:
+
+- Managing dynamically added and removed form entries.
+- Keeping the generated JSON synchronized with form inputs.
+- Restoring previously saved information from local storage.
+- Ensuring automatic saving works correctly while users interact with the form.
+
+These areas require careful coordination between form state, browser storage, and generated output.
+
+### 9. What if the number of users increases by 100x?
+
+The current architecture is lightweight because most application logic runs directly in the user's browser.
+
+Since the application does not depend on a centralized database or backend for its core functionality, increasing visitor numbers does not require scaling an application server or database.
+
+GitHub Pages handles static file hosting. If usage grows significantly, hosting limits, asset delivery, caching, and overall performance should still be monitored.
+
+### 10. What are the trade-offs of this architecture?
+
+The project prioritizes simplicity, privacy, and low maintenance.
+
+**Advantages:**
+- No backend infrastructure or database costs.
+- Resume information stays in the user's browser.
+- Simple deployment and maintenance.
+- Fast client-side processing.
+
+**Limitations:**
+- No cloud synchronization between devices.
+- No user accounts or collaborative features.
+- Clearing browser data may remove saved drafts.
+- Storage depends on browser capabilities and limits.
+
+### 11. What future improvements could be introduced?
+
+Potential improvements include:
+
+- Optional cloud storage and synchronization.
+- Resume templates and customization options.
+- PDF export alongside JSON downloads.
+- Importing existing resume data.
+- Improved accessibility and keyboard navigation.
+- More comprehensive JSON validation.
+- Additional export formats and integrations.
+
+## Live Demo
+
+[🚀 Try Resume JSON Generator](https://edulinkup-interns.github.io/resume-json-generator/)
+
+## Preview
+
+### Light Mode
+![Resume JSON Generator - Light Mode](public/preview-light.png)
+
+### Dark Mode
+![Resume JSON Generator - Dark Mode](public/preview-dark.png)
 
 ## Getting Started
 
-### Prerequisites
-
-- A modern web browser.
-- Git (optional, for cloning the repository).
-
-### Run Locally
+### Run locally
 
 1. Clone the repository:
 
@@ -48,7 +133,7 @@ A lightweight, browser-based resume builder that converts your professional info
    git clone https://github.com/edulinkup-interns/resume-json-generator.git
    ```
 
-2. Navigate to the project directory:
+2. Open the project folder:
 
    ```bash
    cd resume-json-generator
@@ -56,27 +141,36 @@ A lightweight, browser-based resume builder that converts your professional info
 
 3. Open `index.html` in your browser.
 
-   Alternatively, use the Live Server extension in VS Code.
+You can also use a local development server, such as the **Live Server** extension in VS Code.
 
-No additional dependencies, build tools, or backend configuration are required.
+## How to Use
+
+1. Open the application in your browser.
+2. Fill in the resume sections on the single-page form, scrolling down through each section.
+3. Use **+ Add** and **Remove** to add or remove entries where needed.
+4. Watch the **Live Output** panel update as you type, and switch between the **JSON** and **Plain text** tabs.
+5. Select **Copy to clipboard** to copy the output, or **Download output** to save it as a file.
+6. To start over, use the reset option to clear the form and the saved draft.
+
+Your draft is automatically saved in your browser. Drafts are stored locally and are not synced between browsers or devices. Clearing the browser's site data may remove the saved draft.
 
 ## Output Structure
 
-The generated JSON contains the following top-level fields:
+The exported file is a JSON object with the following top-level fields:
 
 | Field | Description |
-|---|---|
-| `personal` | Contact details and professional links |
-| `summary` | Professional summary |
-| `education` | Educational qualifications |
-| `skills` | Technical and professional skills |
-| `experience` | Work experience and internships |
-| `projects` | Projects, technologies, and links |
-| `certifications` | Professional certifications |
-| `achievements` | Accomplishments and awards |
-| `positions` | Leadership roles and responsibilities |
+| --- | --- |
+| `personal` | Object containing full name, email, phone, location, LinkedIn, GitHub, and portfolio |
+| `summary` | Professional summary text |
+| `education` | Array of education entries |
+| `skills` | Flat array of skills, including programming languages, web technologies, databases, tools/platforms, and other skills |
+| `experience` | Array of work, internship, or freelance experience entries |
+| `projects` | Array of projects, including technologies, descriptions, and links |
+| `certifications` | Array of certification entries |
+| `achievements` | Array of achievements |
+| `positions` | Array of leadership and other position entries |
 
-### Example JSON
+Example output:
 
 ```json
 {
@@ -84,7 +178,7 @@ The generated JSON contains the following top-level fields:
     "fullName": "Alex Morgan",
     "email": "alex@example.com",
     "phone": "+91 98765 43210",
-    "location": "Kolkata, India",
+    "location": "Bengaluru, India",
     "linkedin": "https://linkedin.com/in/alexmorgan",
     "github": "https://github.com/alexmorgan",
     "portfolio": "https://alexmorgan.dev"
@@ -92,10 +186,16 @@ The generated JSON contains the following top-level fields:
   "summary": "Computer Science student interested in software development.",
   "education": [],
   "skills": [
+    "Java",
+    "Python",
     "JavaScript",
+    "HTML",
+    "CSS",
     "React",
-    "Node.js",
-    "MongoDB"
+    "MongoDB",
+    "Git",
+    "GitHub",
+    "Problem Solving"
   ],
   "experience": [],
   "projects": [],
@@ -105,40 +205,65 @@ The generated JSON contains the following top-level fields:
 }
 ```
 
-*This is an illustrative example. Actual output is generated dynamically from the information entered in the application.*
+The example is illustrative; fields are populated based on the information entered in the form. The `personal` object contains the user's personal information, while `skills` is exported as a flat array of strings. Optional personal fields are included only when values are provided.
 
-## Privacy & Data Storage
+## Project Structure
 
-- Resume information is stored locally in the browser using `localStorage`.
-- No backend or external database is required.
-- Resume data is not uploaded to an external server by the application.
-- Saved drafts are available in the same browser profile.
-- Clearing browser site data may permanently remove saved information.
+## Project Structure
 
-**Note:** Anyone with access to the same browser profile may be able to view saved resume information. Avoid using shared or public devices for sensitive information.
+```
+resume-json-generator/
+├── .github/         # GitHub configuration
+├── public/
+│   └── logo.png     # Application logo
+├── countries.js     # Country data used by the form
+├── favicon.png      # Site favicon
+├── index.html       # Form structure and page layout
+├── style.css        # Styling and responsive layout
+├── script.js        # Form navigation, data collection, autosave, and JSON export
+├── README.md        # Project documentation
+└── LICENSE          # MIT License
+```
+
+## Technologies
+
+- HTML
+- CSS
+- Vanilla JavaScript
+- Browser APIs: Local Storage, Clipboard API, and Blob downloads
+
+No framework, backend, database, or third-party package is required.
+
+## Privacy
+
+Resume information and saved drafts are handled in your browser by this application. Drafts are stored in `localStorage`; avoid using a shared or public device for sensitive personal information, and clear the saved draft when finished.
+
+
+## Good First Issues
+
+New to open source? We'd love to have you contribute!
+
+Start with these beginner-friendly issues:
+
+- [Good first issues](https://github.com/edulinkup-interns/resume-json-generator/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+- [Issues marked as help wanted](https://github.com/edulinkup-interns/resume-json-generator/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+
+Please read the issue description and the [contribution guidelines](CONTRIBUTING.md) before starting work.
+
+## Roadmap
+
+Here are the currently tracked improvements:
+
+- [ ] [Improve copy feedback and clipboard error handling](https://github.com/edulinkup-interns/resume-json-generator/issues/39)
+
+The roadmap reflects open, tracked issues. New ideas and planned features can be proposed through GitHub Issues.
+
 
 ## Contributing
 
-Contributions, bug reports, and suggestions are welcome!
+Issues and pull requests for bug fixes, usability improvements, and additional export formats are welcome.
 
-1. Fork the repository.
-2. Create a feature branch:
-
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-3. Make your changes and test them locally.
-4. Commit and push your changes:
-
-   ```bash
-   git add .
-   git commit -m "Describe your changes"
-   git push origin feature/your-feature-name
-   ```
-
-5. Open a Pull Request against the upstream repository.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+[MIT LICENSE](LICENSE)
